@@ -1,0 +1,2593 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ismail Oluade &bull; Creative Graphic Designer & Wave Weather Suite</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Space Grotesk, Syne & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Syne"', 'sans-serif'],
+            mono: ['"Space Grotesk"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              orange: '#f97316',
+              amber: '#f59e0b',
+              purple: '#8b5cf6',
+              cyan: '#06b6d4',
+              dark: '#080c14',
+            },
+            glass: {
+              card: 'rgba(255, 255, 255, 0.08)',
+              border: 'rgba(255, 255, 255, 0.18)',
+              input: 'rgba(255, 255, 255, 0.12)',
+              hover: 'rgba(255, 255, 255, 0.22)',
+            }
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-glow': 'pulseGlow 4s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            pulseGlow: {
+              '0%, 100%': { opacity: '0.4' },
+              '50%': { opacity: '0.8' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Glassmorphism styling */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+    .glass-card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card-hover:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .glass-input {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+    .glass-input:focus {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.55);
+      outline: none;
+    }
+    .text-glow {
+      text-shadow: 0 0 35px rgba(249, 115, 22, 0.5);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, #f97316 55%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-cyan {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Dynamic Weather Backgrounds */
+    .bg-weather-sunny {
+      background: linear-gradient(135deg, #7c2d12 0%, #c2410c 35%, #0369a1 100%);
+    }
+    .bg-weather-clear-night {
+      background: linear-gradient(135deg, #030712 0%, #0f172a 50%, #1e1b4b 100%);
+    }
+    .bg-weather-mild {
+      background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 45%, #4338ca 100%);
+    }
+    .bg-weather-cloudy {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #0f172a 100%);
+    }
+    .bg-weather-rainy {
+      background: linear-gradient(135deg, #091a28 0%, #083344 50%, #1e1b4b 100%);
+    }
+    .bg-weather-thunder {
+      background: linear-gradient(135deg, #2e1065 0%, #1e1b4b 50%, #030712 100%);
+    }
+    .bg-weather-cold {
+      background: linear-gradient(135deg, #082f49 0%, #1e3a8a 50%, #0f172a 100%);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.4);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f97316;
+    }
+  </style>
+</head>
+<body id="dynamic-bg" class="min-h-screen bg-weather-mild text-white font-sans transition-all duration-1000 ease-in-out antialiased flex flex-col justify-between selection:bg-orange-500 selection:text-white">
+
+  <!-- Ambient Light Orbs -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-orange-600/15 rounded-full blur-[140px] animate-pulse-glow"></div>
+    <div class="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-purple-600/15 rounded-full blur-[140px] animate-pulse-glow" style="animation-delay: 2s;"></div>
+    <div class="absolute -bottom-40 left-1/4 w-[650px] h-[650px] bg-cyan-600/15 rounded-full blur-[160px]"></div>
+  </div>
+
+  <!-- Unified Top Navigation Bar -->
+  <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-950/75 border-b border-white/10 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      
+      <!-- Ismail Oluade Monogram & Brand -->
+      <a href="#hero" class="flex items-center gap-3 group shrink-0">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-orange-500 via-amber-400 to-cyan-400 p-[1px] shadow-lg shadow-orange-500/20 group-hover:scale-105 transition-transform">
+          <div class="w-full h-full bg-slate-950 rounded-2xl flex items-center justify-center">
+            <span class="font-display font-black text-xl text-orange-400 group-hover:text-white transition-colors">IO</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-display font-extrabold text-lg text-white tracking-tight">Ismail Oluade</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/30 font-bold hidden sm:inline">Lead City</span>
+          </div>
+          <span class="block text-[11px] text-slate-400 font-medium">Graphic Designer &bull; Everyday Wave Hub</span>
+        </div>
+      </a>
+
+      <!-- Quick Section Anchor Tabs -->
+      <div class="hidden lg:flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/5 border border-white/10 text-xs font-semibold text-slate-300">
+        <a href="#wave-app" class="px-3.5 py-1.5 rounded-xl hover:bg-white/10 hover:text-cyan-300 transition flex items-center gap-1.5 text-cyan-300 font-bold">
+          <span>🌊</span> Wave Daily Weather
+        </a>
+        <a href="#about" class="px-3.5 py-1.5 rounded-xl hover:bg-white/10 hover:text-white transition">About Me</a>
+        <a href="#services" class="px-3.5 py-1.5 rounded-xl hover:bg-white/10 hover:text-white transition">What I Do</a>
+        <a href="#projects" class="px-3.5 py-1.5 rounded-xl hover:bg-white/10 hover:text-white transition">Projects</a>
+        <a href="#contact" class="px-3.5 py-1.5 rounded-xl hover:bg-white/10 hover:text-white transition">Contact</a>
+      </div>
+
+      <!-- Action Utilities -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        
+        <!-- Live Quick Weather Widget Pill in Nav -->
+        <a href="#wave-app" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl glass-input text-xs font-semibold hover:bg-white/20 transition">
+          <span id="nav-weather-icon" class="text-base">☀️</span>
+          <span id="nav-weather-temp" class="text-white font-bold">28°C</span>
+          <span id="nav-weather-city" class="text-white/70 text-[11px]">Ibadan</span>
+        </a>
+
+        <!-- Reminders Trigger Button -->
+        <button id="open-reminder-btn" class="glass-input px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 hover:bg-white/25 active:scale-95 transition-all text-white border border-white/20 relative" title="Daily Weather & Outfit Alarms">
+          <span>🔔</span>
+          <span class="hidden md:inline">Alerts</span>
+          <span id="active-reminder-count" class="w-4 h-4 rounded-full bg-orange-500 text-[10px] font-bold flex items-center justify-center text-white">2</span>
+        </button>
+
+        <!-- Temperature Unit Toggle -->
+        <div class="glass-input rounded-xl p-1 flex items-center text-xs font-semibold">
+          <button id="btn-unit-c" class="px-2.5 py-1 rounded-lg bg-white/30 text-white transition-all shadow-sm">°C</button>
+          <button id="btn-unit-f" class="px-2.5 py-1 rounded-lg text-white/70 hover:text-white transition-all">°F</button>
+        </div>
+
+        <!-- Resume Modal Trigger -->
+        <button id="open-cv-btn" class="hidden md:inline-flex px-3.5 py-1.5 rounded-xl text-xs font-semibold glass-input text-slate-200 hover:text-white hover:bg-white/20 transition-all">
+          Resume
+        </button>
+
+        <!-- Direct Contact CTA -->
+        <a href="#contact" class="px-3.5 sm:px-4 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 transition shadow-lg shadow-orange-500/25 active:scale-95">
+          Let's Talk
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Unified Layout Container -->
+  <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 flex-1 flex flex-col gap-20">
+
+    <!-- ======================================================== -->
+    <!-- SECTION 1: EVERYDAY WAVE WEATHER & OUTFIT PLANNER APP   -->
+    <!-- ======================================================== -->
+    <section id="wave-app" class="pt-6">
+      
+      <!-- Wave Header & Badge -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel text-xs font-bold text-cyan-300 uppercase tracking-widest mb-2.5">
+            <span>🌊 Live Daily Utility</span>
+            <span class="text-white/40">&bull;</span>
+            <span>Worldwide Timezones &bull; Outfit Advisor</span>
+          </div>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
+            Wave Weather &bull; Daily Outfit & Alert Planner
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base mt-2">
+            Built for everyday use: Check live forecasts in every country, local timezones, dynamic clothing advice, and scheduled alert alarms.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="document.getElementById('open-reminder-btn').click()" class="px-4 py-2.5 rounded-xl bg-orange-500/20 border border-orange-400/40 hover:bg-orange-500/30 text-orange-200 font-bold text-xs flex items-center gap-2 transition">
+            <span>⏰ Set Outfit Reminder</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search & Geolocation Bar -->
+      <div class="glass-panel rounded-3xl p-4 sm:p-5 shadow-2xl mb-6">
+        <form id="search-form" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 relative">
+          
+          <!-- Search Input -->
+          <div class="relative flex-1">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/60">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 1114 0z"/></svg>
+            </div>
+            <input 
+              type="text" 
+              id="city-search-input" 
+              placeholder="Search any country, capital or city worldwide (e.g. Ibadan, Lagos, London, New York, Tokyo, Dubai, Paris)..."
+              class="w-full pl-11 pr-4 py-3 rounded-2xl glass-input text-white placeholder-white/60 font-medium text-sm sm:text-base focus:ring-2 focus:ring-white/40 transition-all"
+              autocomplete="off"
+            >
+            <!-- Clear Button -->
+            <button type="button" id="clear-search-btn" class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-white/60 hover:text-white">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <!-- Autocomplete Dropdown -->
+            <div id="search-dropdown" class="hidden absolute left-0 right-0 top-full mt-2 glass-panel rounded-2xl shadow-2xl z-50 overflow-hidden border border-white/30 backdrop-blur-2xl">
+              <div id="dropdown-items" class="divide-y divide-white/10 max-h-64 overflow-y-auto">
+                <!-- Dropdown items injected via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex items-center gap-2">
+            <button 
+              type="submit" 
+              id="search-submit-btn"
+              class="flex-1 sm:flex-initial px-6 py-3 rounded-2xl bg-white text-slate-900 font-bold text-sm hover:bg-white/90 active:scale-95 transition shadow-lg flex items-center justify-center gap-2"
+            >
+              <span>Explore</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </button>
+
+            <button 
+              type="button" 
+              id="geo-btn"
+              title="Use Current Location"
+              class="px-4 py-3 rounded-2xl glass-input hover:bg-white/25 active:scale-95 transition text-sm font-semibold flex items-center gap-2 border border-white/20 whitespace-nowrap"
+            >
+              <svg id="geo-icon" class="w-4 h-4 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <span class="hidden md:inline">Use GPS</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Quick Select Global Country Pills -->
+        <div class="mt-3.5 pt-3 border-t border-white/10 flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+          <span class="text-white/70 font-bold uppercase tracking-wider text-[10px] whitespace-nowrap mr-1">World Hubs:</span>
+          <button class="city-pill px-3 py-1 rounded-full glass-input hover:bg-white/25 transition whitespace-nowrap font-medium" data-city="Ibadan" data-lat="7.3775" data-lon="3.9059" data-country="Nigeria">📍 Ibadan (Lead City)</button>
+          <button class="city-pill px-3 py-1 rounded-full glass-input hover:bg-white/25 transition whitespace-nowrap font-medium" data-city="Lagos" data-lat="6.5244" data-lon="3.3792" data-country="Nigeria">🇳🇬 Lagos</button>
+          <button class="city-pill px-3 py-1 rounded-full glass-input hover:bg-white/25 transition whitespace-nowrap font-medium" data-city="London" data-lat="51.5074" data-lon="-0.1278" data-country="United Kingdom">🇬🇧 London</button>
+          <button class="city-pill px-3 py-1 rounded-full glass-input hover:bg-white/25 transition whitespace-nowrap font-medium" data-city="New York" data-lat="40.7128" data-lon="-74.0060" data-country="United States">🇺🇸 New York</button>
+          <button class="city-pill px-3 py-1 rounded-full glass-input hover:bg-white/25 transition whitespace-nowrap font-medium" data-city="Tokyo" data-lat="35.6762" data-lon="139.6503" data-country="Japan">🇯🇵 Tokyo</button>
+          <button class="city-pill px-3 py-1 rounded-full glass-input hover:bg-white/25 transition whitespace-nowrap font-medium" data-city="Dubai" data-lat="25.2048" data-lon="55.2708" data-country="United Arab Emirates">🇦🇪 Dubai</button>
+          <button class="city-pill px-3 py-1 rounded-full glass-input hover:bg-white/25 transition whitespace-nowrap font-medium" data-city="Paris" data-lat="48.8566" data-lon="2.3522" data-country="France">🇫🇷 Paris</button>
+          <button class="city-pill px-3 py-1 rounded-full glass-input hover:bg-white/25 transition whitespace-nowrap font-medium" data-city="Cairo" data-lat="30.0444" data-lon="31.2357" data-country="Egypt">🇪🇬 Cairo</button>
+          <button class="city-pill px-3 py-1 rounded-full glass-input hover:bg-white/25 transition whitespace-nowrap font-medium" data-city="Sydney" data-lat="-33.8688" data-lon="151.2093" data-country="Australia">🇦🇺 Sydney</button>
+        </div>
+      </div>
+
+      <!-- Toast Notification Box -->
+      <div id="toast-banner" class="hidden glass-panel border-red-400/40 bg-red-950/40 rounded-2xl p-3.5 flex items-center justify-between text-sm transition-all duration-300 mb-6">
+        <div class="flex items-center gap-3">
+          <span class="text-xl">🔔</span>
+          <div>
+            <p id="toast-title" class="font-bold text-white">Alert</p>
+            <p id="toast-msg" class="text-xs text-white/80 font-medium"></p>
+          </div>
+        </div>
+        <button id="toast-dismiss-btn" class="p-1 rounded-lg hover:bg-white/10 text-white/70 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Weather & Outfit Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+        
+        <!-- Current Weather & Local Timezone Clock Card -->
+        <div class="lg:col-span-7 glass-panel rounded-3xl p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl">
+          <div class="absolute -right-16 -top-16 w-56 h-56 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div>
+            <!-- Location & Ticking Local Clock -->
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                  <span id="current-timezone" class="text-xs uppercase tracking-wider font-bold text-white/80">Africa/Lagos (WAT, UTC+1)</span>
+                </div>
+                <h3 id="current-city" class="text-3xl sm:text-5xl font-extrabold font-display tracking-tight text-white drop-shadow-md">
+                  Ibadan
+                </h3>
+                <p id="current-country" class="text-sm font-semibold text-white/80">Oyo State, Nigeria</p>
+              </div>
+
+              <!-- Real-time Country Local Clock -->
+              <div class="bg-white/10 px-4 py-2.5 rounded-2xl border border-white/15 backdrop-blur-md text-left sm:text-right">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-white/60">Local Time</div>
+                <div id="current-time" class="text-xl sm:text-2xl font-black font-mono text-white tracking-tight">--:--:--</div>
+                <div id="current-date" class="text-xs text-white/80 font-medium">Loading date...</div>
+              </div>
+            </div>
+
+            <!-- Temperature & Weather Condition -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 my-4">
+              <div class="flex items-baseline gap-2">
+                <span id="current-temp" class="text-6xl sm:text-8xl font-black font-display tracking-tighter text-white drop-shadow-lg">
+                  28
+                </span>
+                <span id="current-temp-unit" class="text-3xl sm:text-4xl font-bold text-white/80">°C</span>
+              </div>
+
+              <div class="flex items-center gap-4 bg-white/10 px-5 py-3.5 rounded-2xl border border-white/15 backdrop-blur-md">
+                <div id="weather-icon-container" class="text-4xl sm:text-5xl filter drop-shadow">
+                  ☀️
+                </div>
+                <div>
+                  <p id="weather-condition" class="text-lg sm:text-xl font-bold text-white">Clear Sky</p>
+                  <p id="temp-feels-like" class="text-xs text-white/80 font-medium">Feels like 29°C</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Extended Meteorological Metrics -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/15">
+            <div class="glass-input rounded-2xl p-3 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-orange-400/20 text-orange-200 flex items-center justify-center text-lg shrink-0">🌡️</div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider font-semibold text-white/60">High / Low</p>
+                <p id="temp-high-low" class="text-sm font-bold text-white">32° / 22°</p>
+              </div>
+            </div>
+
+            <div class="glass-input rounded-2xl p-3 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-blue-400/20 text-blue-200 flex items-center justify-center text-lg shrink-0">💧</div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider font-semibold text-white/60">Humidity</p>
+                <p id="weather-humidity" class="text-sm font-bold text-white">65%</p>
+              </div>
+            </div>
+
+            <div class="glass-input rounded-2xl p-3 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-emerald-400/20 text-emerald-200 flex items-center justify-center text-lg shrink-0">💨</div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider font-semibold text-white/60">Wind</p>
+                <p id="weather-wind" class="text-sm font-bold text-white">12 km/h NE</p>
+              </div>
+            </div>
+
+            <div class="glass-input rounded-2xl p-3 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-200 flex items-center justify-center text-lg shrink-0">☀️</div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider font-semibold text-white/60">UV Index</p>
+                <p id="weather-uv" class="text-sm font-bold text-white">6 (Mod)</p>
+              </div>
+            </div>
+
+            <div class="glass-input rounded-2xl p-3 flex items-center gap-3 col-span-2">
+              <div class="w-9 h-9 rounded-xl bg-yellow-400/20 text-yellow-200 flex items-center justify-center text-lg shrink-0">🌅</div>
+              <div class="flex items-center justify-between w-full">
+                <div>
+                  <p class="text-[10px] uppercase tracking-wider font-semibold text-white/60">Sunrise</p>
+                  <p id="weather-sunrise" class="text-xs font-bold text-white">06:24 AM</p>
+                </div>
+                <div class="h-6 w-[1px] bg-white/20 mx-2"></div>
+                <div>
+                  <p class="text-[10px] uppercase tracking-wider font-semibold text-white/60">Sunset</p>
+                  <p id="weather-sunset" class="text-xs font-bold text-white">06:48 PM</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-input rounded-2xl p-3 flex items-center gap-3 col-span-2">
+              <div class="w-9 h-9 rounded-xl bg-purple-400/20 text-purple-200 flex items-center justify-center text-lg shrink-0">📊</div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider font-semibold text-white/60">Barometric Pressure</p>
+                <p id="weather-pressure" class="text-xs font-bold text-white">1013 hPa (Stable)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic 'What to Wear / Pack' Advisor Card -->
+        <div class="lg:col-span-5 glass-panel rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+          <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-amber-300/10 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div>
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-xl shadow">👔</div>
+                <div>
+                  <h3 class="text-xl font-bold font-display tracking-tight text-white">What to Wear</h3>
+                  <p class="text-xs text-white/70 font-medium">Smart style & packing recommendations</p>
+                </div>
+              </div>
+              <span id="outfit-temp-tag" class="text-xs px-2.5 py-1 rounded-full font-bold bg-white/20 text-white uppercase tracking-wider">
+                Warm Vibe
+              </span>
+            </div>
+
+            <!-- Precipitation Alert Banner -->
+            <div id="rain-advisory-banner" class="hidden mb-4 p-3 rounded-2xl bg-sky-400/25 border border-sky-300/40 text-xs font-semibold flex items-center gap-2.5 shadow-sm text-sky-100">
+              <span class="text-lg">☔</span>
+              <span>Precipitation alert: Carry an umbrella or waterproof jacket!</span>
+            </div>
+
+            <!-- Recommendations Deck -->
+            <div id="outfit-recommendations-list" class="space-y-3">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Key Essentials -->
+          <div class="mt-6 pt-4 border-t border-white/15">
+            <div class="flex items-center justify-between text-xs text-white/80 font-medium">
+              <span class="flex items-center gap-1.5">
+                <span>🎒</span> <strong>Key Essentials:</strong>
+              </span>
+              <span id="essentials-pills" class="flex items-center gap-1.5 flex-wrap justify-end">
+                <!-- Badges -->
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 24-Hour Hourly Weather Forecast Slider -->
+      <div class="glass-panel rounded-3xl p-6 shadow-2xl mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center text-lg">⏱️</div>
+            <div>
+              <h3 class="text-base sm:text-lg font-bold font-display text-white">24-Hour Hourly Progression</h3>
+              <p class="text-xs text-white/70 font-medium">Hour-by-hour temperature and rain probability in local timezone</p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold text-white/60 uppercase tracking-wider hidden sm:block">Scroll Timeline &rarr;</span>
+        </div>
+        <div id="hourly-forecast-row" class="flex items-center gap-3 overflow-x-auto pb-2 pt-1">
+          <!-- Hourly cards injected via JS -->
+        </div>
+      </div>
+
+      <!-- 5-Day Forecast Deck Section -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-7 shadow-2xl">
+        <div class="flex items-center justify-between mb-5">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center text-lg">📅</div>
+            <div>
+              <h3 class="text-lg sm:text-xl font-bold font-display text-white">5-Day Forecast Deck</h3>
+              <p class="text-xs text-white/70 font-medium">Daily temperature progression & conditions</p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold text-white/60 uppercase tracking-wider hidden sm:block">Open-Meteo High Accuracy</span>
+        </div>
+        <div id="forecast-deck" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5">
+          <!-- 5-Day Cards injected via JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 2: ISMAIL OLUADE &bull; DESIGNER PORTFOLIO       -->
+    <!-- ======================================================== -->
+    <section id="hero" class="pt-10 flex flex-col items-center text-center">
+      
+      <!-- Lead City University Pill -->
+      <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel mb-8 shadow-sm">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        </span>
+        <span class="text-xs font-semibold text-slate-300">Available for Freelance & Creative Roles</span>
+        <span class="text-slate-600">&bull;</span>
+        <span class="text-xs font-bold text-orange-400">Lead City University, Ibadan</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.1] max-w-5xl mb-6">
+        Transforming Bold Ideas Into <br class="hidden sm:block">
+        <span class="gradient-text text-glow">Iconic Visual Experiences</span>
+      </h1>
+
+      <!-- Bio Subtitle -->
+      <p class="text-base sm:text-xl text-slate-300 max-w-2xl font-normal leading-relaxed mb-10">
+        Hey, I'm <strong class="text-white font-semibold">Ismail Oluade</strong> — a passionate graphic designer blending strategic brand identity, sleek UI/UX aesthetics, and high-impact visual storytelling.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mb-14">
+        <a href="#projects" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm sm:text-base hover:from-orange-600 hover:to-amber-600 transition shadow-xl shadow-orange-500/30 flex items-center gap-2 group active:scale-95">
+          <span>Explore Design Work</span>
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+        <a href="#contact" class="px-8 py-3.5 rounded-2xl glass-panel text-white font-bold text-sm sm:text-base hover:bg-white/10 transition flex items-center gap-2 active:scale-95">
+          <span>Get in Touch</span>
+          <span class="text-orange-400">&rarr;</span>
+        </a>
+
+        <button onclick="document.getElementById('open-cv-btn').click()" class="px-6 py-3.5 rounded-2xl glass-panel border-white/30 text-slate-200 font-bold text-sm sm:text-base hover:bg-white/10 transition flex items-center gap-2 active:scale-95">
+          <span>📄 View Digital Resume</span>
+        </button>
+      </div>
+
+      <!-- Creative Arsenal Pill Bar -->
+      <div class="w-full max-w-3xl pt-8 border-t border-white/10 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs font-semibold text-slate-400">
+        <span class="uppercase tracking-widest text-[11px] text-slate-400 font-bold w-full sm:w-auto mb-2 sm:mb-0">Creative Toolkit:</span>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-panel text-white/90">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Adobe Photoshop
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-panel text-white/90">
+          <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> Adobe Illustrator
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-panel text-white/90">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Figma UI/UX
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-panel text-white/90">
+          <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span> Adobe InDesign
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-panel text-white/90">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> CorelDraw & Canva
+        </div>
+      </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="pt-8 border-t border-white/10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Creator Showcase Avatar Card -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative mx-auto max-w-md rounded-3xl p-1 bg-gradient-to-tr from-orange-500 via-purple-500 to-cyan-500 shadow-2xl">
+            <div class="bg-slate-950 rounded-[22px] p-6 sm:p-8 flex flex-col items-center text-center relative overflow-hidden">
+              
+              <div class="w-36 h-36 rounded-full bg-gradient-to-tr from-orange-500 via-amber-400 to-rose-500 p-1 shadow-xl mb-6 relative">
+                <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-5xl">
+                  🎨
+                </div>
+                <div class="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-slate-900 border-2 border-orange-500 flex items-center justify-center text-lg" title="Verified Designer">
+                  ✨
+                </div>
+              </div>
+
+              <h3 class="font-display font-bold text-2xl text-white mb-1">Ismail Oluade</h3>
+              <p class="text-sm font-semibold text-orange-400 mb-4">Graphic Designer & Visual Identity Specialist</p>
+              
+              <!-- Lead City University Badge -->
+              <div class="w-full glass-panel rounded-2xl p-4 text-left mb-5">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-xl shrink-0">
+                    🎓
+                  </div>
+                  <div>
+                    <h4 class="text-xs uppercase tracking-wider font-bold text-slate-400">Education & Alma Mater</h4>
+                    <p class="text-sm font-bold text-white">Lead City University, Ibadan</p>
+                    <p class="text-xs text-slate-400">Oyo State, Nigeria</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Contacts with Both Verified Lines -->
+              <div class="w-full space-y-2 text-xs font-medium text-slate-300">
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/5">
+                  <span class="text-slate-400">Primary Phone:</span>
+                  <a href="tel:08145934121" class="font-bold text-orange-400 hover:underline">08145934121</a>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/5">
+                  <span class="text-slate-400">Second Phone:</span>
+                  <a href="tel:08053840221" class="font-bold text-orange-400 hover:underline">08053840221</a>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/5">
+                  <span class="text-slate-400">Email:</span>
+                  <a href="mailto:ismailouade@gmail.com" class="font-bold text-white hover:underline truncate ml-2">ismailouade@gmail.com</a>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/5">
+                  <span class="text-slate-400">LinkedIn:</span>
+                  <a href="https://www.linkedin.com/in/ismail-oluade-680409441" target="_blank" class="font-bold text-cyan-400 hover:underline">ismail-oluade-680409441</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Narrative Text -->
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel text-xs font-bold text-orange-400 uppercase tracking-widest mb-4">
+            About Me
+          </div>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-white mb-6">
+            Driven by Creativity, Rooted in <span class="gradient-text">Lead City University, Ibadan</span>.
+          </h2>
+          <div class="space-y-4 text-slate-300 text-base sm:text-lg leading-relaxed">
+            <p>
+              Hello! I am <strong class="text-white">Ismail Oluade</strong>, a Nigerian creative graphic designer developing innovative visual communications at <strong class="text-orange-400">Lead City University, Ibadan</strong>.
+            </p>
+            <p>
+              Graphic design isn't just about putting colors and shapes on a canvas; it's about <em>problem-solving through visual hierarchy and emotional resonance</em>. Whether crafting an unforgettable brand identity from scratch, designing conversion-focused social media campaigns, or sculpting modern interactive interfaces like Wave, my goal is to give every client and product an unmistakable creative voice.
+            </p>
+            <p>
+              My work combines clean typography, balanced compositions, modern glassmorphism, and bold color palettes that command attention in crowded digital spaces.
+            </p>
+          </div>
+
+          <!-- 3 Highlight Metrics -->
+          <div class="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-white/10">
+            <div>
+              <div class="font-display font-black text-3xl sm:text-4xl text-orange-400">30+</div>
+              <div class="text-xs sm:text-sm text-slate-400 font-medium mt-1">Creative Projects Delivered</div>
+            </div>
+            <div>
+              <div class="font-display font-black text-3xl sm:text-4xl text-purple-400">100%</div>
+              <div class="text-xs sm:text-sm text-slate-400 font-medium mt-1">Client Dedication & Precision</div>
+            </div>
+            <div>
+              <div class="font-display font-black text-3xl sm:text-4xl text-cyan-400">LCU</div>
+              <div class="text-xs sm:text-sm text-slate-400 font-medium mt-1">Lead City Ibadan Alum/Student</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- What My Job Entails Section (4 Pillars) -->
+    <section id="services" class="pt-8 border-t border-white/10">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel text-xs font-bold text-orange-400 uppercase tracking-widest mb-4">
+          What My Job Entails
+        </div>
+        <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
+          Comprehensive Graphic Design & Visual Solutions
+        </h2>
+        <p class="text-slate-300 text-base sm:text-lg mt-4">
+          Every brand needs clarity, distinction, and emotional connection. Here is how I elevate visual communication from concept to final execution:
+        </p>
+      </div>
+
+      <!-- 4 Pillars Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Pillar 1: Brand Identity -->
+        <div class="glass-panel glass-card-hover rounded-3xl p-7 flex flex-col justify-between group">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              ⚡
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-3">Brand Identity & Strategy</h3>
+            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+              Forging distinctive logos, visual guidelines, typography rules, and color palettes that make your business instantly recognizable and enduring.
+            </p>
+          </div>
+          <ul class="text-xs space-y-2 text-slate-300 border-t border-white/10 pt-4">
+            <li class="flex items-center gap-2"><span class="text-orange-400">&check;</span> Logo Suites & Monograms</li>
+            <li class="flex items-center gap-2"><span class="text-orange-400">&check;</span> Brand Style Guidelines</li>
+            <li class="flex items-center gap-2"><span class="text-orange-400">&check;</span> Stationery & Business Cards</li>
+          </ul>
+        </div>
+
+        <!-- Pillar 2: UI/UX & Digital Product -->
+        <div class="glass-panel glass-card-hover rounded-3xl p-7 flex flex-col justify-between group">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              📱
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-3">UI/UX & Digital Product</h3>
+            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+              Designing user-centered web and mobile app interfaces with crisp glassmorphism, responsive grids, intuitive interactions, and design systems.
+            </p>
+          </div>
+          <ul class="text-xs space-y-2 text-slate-300 border-t border-white/10 pt-4">
+            <li class="flex items-center gap-2"><span class="text-cyan-400">&check;</span> Mobile & Web Interfaces</li>
+            <li class="flex items-center gap-2"><span class="text-cyan-400">&check;</span> Wireframing & Prototyping</li>
+            <li class="flex items-center gap-2"><span class="text-cyan-400">&check;</span> Wave Weather & Style App</li>
+          </ul>
+        </div>
+
+        <!-- Pillar 3: Marketing & Social Creative -->
+        <div class="glass-panel glass-card-hover rounded-3xl p-7 flex flex-col justify-between group">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              🎯
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-3">Marketing & Social Media</h3>
+            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+              Scroll-stopping campaign banners, Instagram carousels, event flyers, and YouTube thumbnails engineered to boost engagement and conversions.
+            </p>
+          </div>
+          <ul class="text-xs space-y-2 text-slate-300 border-t border-white/10 pt-4">
+            <li class="flex items-center gap-2"><span class="text-purple-400">&check;</span> Ad Creatives & Promo Banners</li>
+            <li class="flex items-center gap-2"><span class="text-purple-400">&check;</span> High-Engagement Carousels</li>
+            <li class="flex items-center gap-2"><span class="text-purple-400">&check;</span> Music & Event Posters</li>
+          </ul>
+        </div>
+
+        <!-- Pillar 4: Print & Packaging -->
+        <div class="glass-panel glass-card-hover rounded-3xl p-7 flex flex-col justify-between group">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              📦
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-3">Print & Packaging Design</h3>
+            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+              Production-ready product boxes, bottle labels, magazine editorial layouts, brochures, and large-format roll-up banners ready for offset & digital printing.
+            </p>
+          </div>
+          <ul class="text-xs space-y-2 text-slate-300 border-t border-white/10 pt-4">
+            <li class="flex items-center gap-2"><span class="text-amber-400">&check;</span> Product Labeling & Boxes</li>
+            <li class="flex items-center gap-2"><span class="text-amber-400">&check;</span> Brochures & Catalogs</li>
+            <li class="flex items-center gap-2"><span class="text-amber-400">&check;</span> CMYK Pre-Press Specs</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Projects Showcase Section -->
+    <section id="projects" class="pt-8 border-t border-white/10">
+      
+      <!-- Filter Bar -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel text-xs font-bold text-orange-400 uppercase tracking-widest mb-4">
+            Portfolio Gallery
+          </div>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
+            Featured Design Projects
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base mt-2">
+            A selection of branding identities, digital applications, packaging, and marketing campaigns.
+          </p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold">
+          <button class="project-filter-btn px-4 py-2 rounded-xl bg-orange-500 text-white transition shadow-sm" data-filter="all">All</button>
+          <button class="project-filter-btn px-4 py-2 rounded-xl glass-panel text-slate-300 hover:text-white transition" data-filter="uiux">UI/UX & Web</button>
+          <button class="project-filter-btn px-4 py-2 rounded-xl glass-panel text-slate-300 hover:text-white transition" data-filter="branding">Branding</button>
+          <button class="project-filter-btn px-4 py-2 rounded-xl glass-panel text-slate-300 hover:text-white transition" data-filter="packaging">Packaging</button>
+          <button class="project-filter-btn px-4 py-2 rounded-xl glass-panel text-slate-300 hover:text-white transition" data-filter="print">Print & Posters</button>
+        </div>
+      </div>
+
+      <!-- Projects Grid -->
+      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Project 1: Wave Global Weather & Outfit Planner -->
+        <div class="project-card glass-panel glass-card-hover rounded-3xl overflow-hidden flex flex-col group cursor-pointer" data-category="uiux" onclick="openProjectModal('wave-weather')">
+          <div class="h-60 bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-800 relative p-6 flex flex-col justify-between overflow-hidden">
+            <div class="flex items-center justify-between z-10">
+              <span class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white font-bold text-xs">⭐ Flagship Interactive App</span>
+              <span class="text-2xl">🌊☀️</span>
+            </div>
+            <div class="z-10 bg-slate-900/70 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl">
+              <div class="flex items-center justify-between text-white">
+                <div>
+                  <p class="text-xs font-medium text-cyan-300">Worldwide Timezones & Reminders</p>
+                  <h4 class="font-display font-black text-xl">Wave Weather & Outfit</h4>
+                </div>
+                <span class="text-2xl font-black">28°C</span>
+              </div>
+            </div>
+            <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-cyan-400/20 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500"></div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">UI/UX & Web App</span>
+                <span class="text-xs text-slate-400 font-medium">Interactive Demo</span>
+              </div>
+              <h3 class="font-display font-bold text-xl text-white group-hover:text-orange-400 transition-colors mb-2">
+                Wave &bull; Global Weather & Outfit Planner
+              </h3>
+              <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                Glassmorphism dashboard featuring real-time Open-Meteo forecasts across all countries, country-specific timezones, 24-hour hourly timeline, smart reminder alarms, and dynamic outfit advice.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+              <span class="text-xs font-semibold text-slate-400">Tailwind &bull; Vanilla JS &bull; UI/UX</span>
+              <span class="text-xs font-bold text-orange-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                View Case Study &rarr;
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: Lead City Creatives Exhibition -->
+        <div class="project-card glass-panel glass-card-hover rounded-3xl overflow-hidden flex flex-col group cursor-pointer" data-category="branding" onclick="openProjectModal('lead-city-fest')">
+          <div class="h-60 bg-gradient-to-tr from-purple-800 via-orange-600 to-amber-500 relative p-6 flex flex-col justify-between overflow-hidden">
+            <div class="flex items-center justify-between z-10">
+              <span class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white font-bold text-xs">🎓 Campus Project</span>
+              <span class="text-2xl">🏛️</span>
+            </div>
+            <div class="z-10 bg-slate-900/60 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl text-center">
+              <p class="text-[11px] font-bold uppercase tracking-widest text-orange-300">Lead City University, Ibadan</p>
+              <h4 class="font-display font-black text-xl text-white">LCU DESIGN CONVERGE</h4>
+            </div>
+            <div class="absolute -left-10 -bottom-10 w-44 h-44 bg-purple-500/30 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500"></div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Branding & Wayfinding</span>
+                <span class="text-xs text-slate-400 font-medium">Ibadan, Nigeria</span>
+              </div>
+              <h3 class="font-display font-bold text-xl text-white group-hover:text-orange-400 transition-colors mb-2">
+                Lead City Creatives Festival
+              </h3>
+              <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                Comprehensive brand identity, exhibition collateral, directional signage, and attendee badge system for Lead City University's creative arts symposium.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+              <span class="text-xs font-semibold text-slate-400">Illustrator &bull; InDesign &bull; Print</span>
+              <span class="text-xs font-bold text-orange-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                View Case Study &rarr;
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: AfroVibe Music & Soundwave Festival -->
+        <div class="project-card glass-panel glass-card-hover rounded-3xl overflow-hidden flex flex-col group cursor-pointer" data-category="print" onclick="openProjectModal('afrovibe')">
+          <div class="h-60 bg-gradient-to-tr from-pink-600 via-rose-600 to-amber-500 relative p-6 flex flex-col justify-between overflow-hidden">
+            <div class="flex items-center justify-between z-10">
+              <span class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white font-bold text-xs">🎵 Music & Culture</span>
+              <span class="text-2xl">🔥</span>
+            </div>
+            <div class="z-10 bg-black/60 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl">
+              <h4 class="font-display font-black text-2xl text-white tracking-wider">AFROVIBE FEST</h4>
+              <p class="text-xs text-amber-300 font-semibold">Visual Identity & Stage Motion</p>
+            </div>
+            <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-rose-500/30 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500"></div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-bold text-pink-400 uppercase tracking-wider">Poster & Motion</span>
+                <span class="text-xs text-slate-400 font-medium">Entertainment</span>
+              </div>
+              <h3 class="font-display font-bold text-xl text-white group-hover:text-orange-400 transition-colors mb-2">
+                AfroVibe Soundstage Concert
+              </h3>
+              <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                Bold 3D typography, vibrant neon poster campaign, merchandise jerseys, and digital billboard mockups celebrating contemporary African soundscapes.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+              <span class="text-xs font-semibold text-slate-400">Photoshop &bull; 3D Type &bull; Billboard</span>
+              <span class="text-xs font-bold text-orange-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                View Case Study &rarr;
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4: Lumina Luxury Botanical Skincare -->
+        <div class="project-card glass-panel glass-card-hover rounded-3xl overflow-hidden flex flex-col group cursor-pointer" data-category="packaging" onclick="openProjectModal('lumina-skincare')">
+          <div class="h-60 bg-gradient-to-tr from-emerald-800 via-teal-700 to-slate-900 relative p-6 flex flex-col justify-between overflow-hidden">
+            <div class="flex items-center justify-between z-10">
+              <span class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white font-bold text-xs">🌿 Eco-Luxury</span>
+              <span class="text-2xl">✨</span>
+            </div>
+            <div class="z-10 bg-slate-950/60 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-300">Organic Cosmetics</p>
+              <h4 class="font-display font-bold text-xl text-white">LUMINA BOTANICS</h4>
+            </div>
+            <div class="absolute -left-10 -bottom-10 w-44 h-44 bg-emerald-500/20 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500"></div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Packaging & Print</span>
+                <span class="text-xs text-slate-400 font-medium">Beauty & Wellness</span>
+              </div>
+              <h3 class="font-display font-bold text-xl text-white group-hover:text-orange-400 transition-colors mb-2">
+                Lumina Botanical Skincare
+              </h3>
+              <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                Minimalist cosmetic jar labels, luxury foil-stamped unboxing carton, and clean editorial photography art direction for an eco-conscious skincare brand.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+              <span class="text-xs font-semibold text-slate-400">Illustrator &bull; Dieline &bull; Foil Stamp</span>
+              <span class="text-xs font-bold text-orange-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                View Case Study &rarr;
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 5: NexaPay Digital Banking & Neo-Wallet UI -->
+        <div class="project-card glass-panel glass-card-hover rounded-3xl overflow-hidden flex flex-col group cursor-pointer" data-category="uiux" onclick="openProjectModal('nexapay')">
+          <div class="h-60 bg-gradient-to-tr from-blue-900 via-indigo-900 to-purple-800 relative p-6 flex flex-col justify-between overflow-hidden">
+            <div class="flex items-center justify-between z-10">
+              <span class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white font-bold text-xs">💳 FinTech App</span>
+              <span class="text-2xl">⚡</span>
+            </div>
+            <div class="z-10 bg-slate-950/70 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl">
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+                <span>Card Balance</span>
+                <span class="text-emerald-400 font-bold">+14.2%</span>
+              </div>
+              <h4 class="font-display font-black text-2xl text-white">$18,450.00</h4>
+            </div>
+            <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-blue-500/20 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500"></div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">UI/UX & Mobile</span>
+                <span class="text-xs text-slate-400 font-medium">Fintech</span>
+              </div>
+              <h3 class="font-display font-bold text-xl text-white group-hover:text-orange-400 transition-colors mb-2">
+                NexaPay Digital Banking
+              </h3>
+              <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                Modern dark-mode fintech mobile banking experience featuring frictionless multi-currency wallets, instant peer-to-peer transfers, and biometric verification.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+              <span class="text-xs font-semibold text-slate-400">Figma &bull; Design System &bull; iOS</span>
+              <span class="text-xs font-bold text-orange-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                View Case Study &rarr;
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 6: Elysian Artisan Coffee Co. -->
+        <div class="project-card glass-panel glass-card-hover rounded-3xl overflow-hidden flex flex-col group cursor-pointer" data-category="branding" onclick="openProjectModal('elysian-coffee')">
+          <div class="h-60 bg-gradient-to-tr from-amber-950 via-amber-800 to-orange-700 relative p-6 flex flex-col justify-between overflow-hidden">
+            <div class="flex items-center justify-between z-10">
+              <span class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white font-bold text-xs">☕ Specialty Roastery</span>
+              <span class="text-2xl">🌱</span>
+            </div>
+            <div class="z-10 bg-black/60 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-amber-300">Single Origin Roast</p>
+              <h4 class="font-display font-black text-xl text-white">ELYSIAN ROASTERS</h4>
+            </div>
+            <div class="absolute -left-10 -bottom-10 w-44 h-44 bg-amber-500/20 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500"></div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Brand & Packaging</span>
+                <span class="text-xs text-slate-400 font-medium">Hospitality</span>
+              </div>
+              <h3 class="font-display font-bold text-xl text-white group-hover:text-orange-400 transition-colors mb-2">
+                Elysian Coffee Roasters
+              </h3>
+              <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                Visual rebranding for a craft coffee roaster. Developed hand-illustrated single-origin badges, compostable bag packaging, takeaway cups, and cafe collateral.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+              <span class="text-xs font-semibold text-slate-400">Packaging &bull; Vector Art &bull; Print</span>
+              <span class="text-xs font-bold text-orange-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                View Case Study &rarr;
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Skills Matrix Section -->
+    <section id="skills" class="pt-8 border-t border-white/10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-5">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel text-xs font-bold text-orange-400 uppercase tracking-widest mb-4">
+            Software & Capabilities
+          </div>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight mb-6">
+            The Tools Powering My Creative Output
+          </h2>
+          <p class="text-slate-300 text-base leading-relaxed mb-8">
+            A designer's craft is guided by vision and executed with mastery of modern software. I combine Adobe Creative Cloud, modern UI/UX prototyping tools, and front-end design knowledge to deliver complete solutions.
+          </p>
+
+          <div class="glass-panel rounded-2xl p-6 border-l-4 border-l-orange-500">
+            <p class="text-sm italic text-slate-200 leading-relaxed mb-4">
+              "Ismail has an exceptional eye for balance, modern color schemes, and typographical harmony. He delivered our campaign assets well ahead of schedule with flawless precision."
+            </p>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-orange-500/30 flex items-center justify-center font-bold text-xs text-orange-300">LC</div>
+              <div>
+                <p class="text-xs font-bold text-white">Lead City Student Association</p>
+                <p class="text-[11px] text-slate-400">Creative Committee Lead</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 space-y-5">
+          <div class="glass-panel rounded-2xl p-5">
+            <div class="flex items-center justify-between text-sm font-bold text-white mb-2">
+              <span class="flex items-center gap-2.5"><span class="w-3 h-3 rounded-full bg-blue-500"></span> Adobe Photoshop</span>
+              <span class="text-orange-400">95%</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+              <div class="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" style="width: 95%"></div>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-2xl p-5">
+            <div class="flex items-center justify-between text-sm font-bold text-white mb-2">
+              <span class="flex items-center gap-2.5"><span class="w-3 h-3 rounded-full bg-orange-500"></span> Adobe Illustrator</span>
+              <span class="text-orange-400">92%</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+              <div class="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full" style="width: 92%"></div>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-2xl p-5">
+            <div class="flex items-center justify-between text-sm font-bold text-white mb-2">
+              <span class="flex items-center gap-2.5"><span class="w-3 h-3 rounded-full bg-purple-500"></span> Figma UI/UX</span>
+              <span class="text-orange-400">90%</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+              <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" style="width: 90%"></div>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-2xl p-5">
+            <div class="flex items-center justify-between text-sm font-bold text-white mb-2">
+              <span class="flex items-center gap-2.5"><span class="w-3 h-3 rounded-full bg-pink-500"></span> Adobe InDesign</span>
+              <span class="text-orange-400">86%</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+              <div class="h-full bg-gradient-to-r from-pink-500 to-rose-500 rounded-full" style="width: 86%"></div>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-2xl p-5">
+            <div class="flex items-center justify-between text-sm font-bold text-white mb-2">
+              <span class="flex items-center gap-2.5"><span class="w-3 h-3 rounded-full bg-cyan-400"></span> Front-End Styling & UI/UX (Wave)</span>
+              <span class="text-orange-400">85%</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+              <div class="h-full bg-gradient-to-r from-cyan-400 to-teal-500 rounded-full" style="width: 85%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 3: CONTACT ISMAIL OLUADE (BOTH PHONE NUMBERS)   -->
+    <!-- ======================================================== -->
+    <section id="contact" class="pt-8 border-t border-white/10">
+      <div class="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+        <div class="absolute -right-20 -top-20 w-80 h-80 bg-orange-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+          
+          <!-- Left: Verified Contact Details -->
+          <div class="lg:col-span-5 flex flex-col justify-between">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel text-xs font-bold text-orange-400 uppercase tracking-widest mb-4">
+                Get In Touch
+              </div>
+              <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight mb-4">
+                Have a Project in Mind? <span class="gradient-text">Let's Create Together.</span>
+              </h2>
+              <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-8">
+                Whether you need a brand identity, an app revamp, high-converting marketing graphics, or want to collaborate with a dedicated designer from Lead City University Ibadan, my phone lines and inboxes are open!
+              </p>
+
+              <!-- Verified Contact Points with Both Numbers -->
+              <div class="space-y-3.5">
+                
+                <!-- Primary Phone: 08145934121 -->
+                <a href="tel:08145934121" class="glass-panel glass-card-hover rounded-2xl p-4 flex items-center justify-between group">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                      📞
+                    </div>
+                    <div>
+                      <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Primary Phone (Call & WhatsApp)</p>
+                      <p class="text-base font-bold text-white group-hover:text-orange-400 transition">08145934121</p>
+                    </div>
+                  </div>
+                  <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold">Call</span>
+                </a>
+
+                <!-- Secondary Phone: 08053840221 -->
+                <a href="tel:08053840221" class="glass-panel glass-card-hover rounded-2xl p-4 flex items-center justify-between group">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                      📱
+                    </div>
+                    <div>
+                      <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Secondary Phone (Call & WhatsApp)</p>
+                      <p class="text-base font-bold text-white group-hover:text-amber-400 transition">08053840221</p>
+                    </div>
+                  </div>
+                  <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold">Call</span>
+                </a>
+
+                <!-- WhatsApp Direct Chat for Both Lines -->
+                <div class="grid grid-cols-2 gap-2.5">
+                  <a href="https://wa.me/2348145934121" target="_blank" rel="noopener noreferrer" class="glass-panel glass-card-hover rounded-2xl p-3 flex items-center gap-3 group">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg shrink-0">💬</div>
+                    <div class="truncate">
+                      <p class="text-[10px] font-bold text-slate-400 uppercase">WhatsApp 1</p>
+                      <p class="text-xs font-bold text-emerald-300 truncate">08145934121</p>
+                    </div>
+                  </a>
+
+                  <a href="https://wa.me/2348053840221" target="_blank" rel="noopener noreferrer" class="glass-panel glass-card-hover rounded-2xl p-3 flex items-center gap-3 group">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg shrink-0">💬</div>
+                    <div class="truncate">
+                      <p class="text-[10px] font-bold text-slate-400 uppercase">WhatsApp 2</p>
+                      <p class="text-xs font-bold text-emerald-300 truncate">08053840221</p>
+                    </div>
+                  </a>
+                </div>
+
+                <!-- Gmail -->
+                <div class="glass-panel rounded-2xl p-4 flex items-center justify-between gap-4">
+                  <a href="mailto:ismailouade@gmail.com" class="flex items-center gap-4 flex-1 truncate group">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                      ✉️
+                    </div>
+                    <div class="truncate">
+                      <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Official Gmail</p>
+                      <p class="text-base font-bold text-white group-hover:text-red-400 transition truncate">ismailouade@gmail.com</p>
+                    </div>
+                  </a>
+                  <button onclick="copyEmailToClipboard()" class="p-2 rounded-xl glass-input hover:bg-white/20 text-xs font-semibold text-slate-200 active:scale-95 transition" title="Copy email address">
+                    📋 Copy
+                  </button>
+                </div>
+
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/ismail-oluade-680409441" target="_blank" rel="noopener noreferrer" class="glass-panel glass-card-hover rounded-2xl p-4 flex items-center gap-4 group">
+                  <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                    🔗
+                  </div>
+                  <div class="truncate">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">LinkedIn Profile</p>
+                    <p class="text-base font-bold text-white group-hover:text-blue-400 transition truncate">linkedin.com/in/ismail-oluade-680409441</p>
+                  </div>
+                </a>
+
+              </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-white/10 text-xs text-slate-400">
+              📍 Based in <strong>Ibadan, Nigeria</strong> &bull; Lead City University &bull; Available worldwide for remote projects
+            </div>
+          </div>
+
+          <!-- Right: Interactive Message Form -->
+          <div class="lg:col-span-7">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8">
+              <h3 class="font-display font-bold text-2xl text-white mb-2">Send a Message</h3>
+              <p class="text-slate-300 text-sm mb-6">Fill in the form below and I'll get back to you within 24 hours.</p>
+
+              <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Your Name</label>
+                    <input type="text" required placeholder="e.g. Adebayo Johnson" class="w-full px-4 py-3 rounded-xl bg-slate-950/70 border border-white/15 text-white placeholder-slate-500 text-sm focus:border-orange-500 focus:outline-none transition">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Your Email</label>
+                    <input type="email" required placeholder="e.g. client@example.com" class="w-full px-4 py-3 rounded-xl bg-slate-950/70 border border-white/15 text-white placeholder-slate-500 text-sm focus:border-orange-500 focus:outline-none transition">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Project Type</label>
+                  <select class="w-full px-4 py-3 rounded-xl bg-slate-950/70 border border-white/15 text-white text-sm focus:border-orange-500 focus:outline-none transition">
+                    <option value="Brand Identity">Brand Identity & Logo Design</option>
+                    <option value="UI/UX & Web Design">UI/UX & Web/App Design (e.g. Wave Weather)</option>
+                    <option value="Social Media & Marketing">Marketing & Social Media Creatives</option>
+                    <option value="Packaging & Print">Packaging, Labels & Print</option>
+                    <option value="Other Creative Work">Other Creative Consultation</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Project Brief / Details</label>
+                  <textarea rows="4" required placeholder="Tell me about your goals, timeline, and vision..." class="w-full px-4 py-3 rounded-xl bg-slate-950/70 border border-white/15 text-white placeholder-slate-500 text-sm focus:border-orange-500 focus:outline-none transition"></textarea>
+                </div>
+
+                <button type="submit" id="contact-submit-btn" class="w-full py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-base hover:from-orange-600 hover:to-amber-600 transition shadow-lg shadow-orange-500/25 active:scale-95 flex items-center justify-center gap-2">
+                  <span>Send Message Directly</span>
+                  <span class="text-xl">&rarr;</span>
+                </button>
+
+                <div id="contact-success-msg" class="hidden p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-semibold text-center">
+                  ✨ Thank you! Preparing your message to send directly to ismailouade@gmail.com!
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Unified Footer -->
+  <footer class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-white/10 text-slate-400 text-xs text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-xl bg-orange-500 flex items-center justify-center font-display font-black text-slate-950 text-sm">
+        IO
+      </div>
+      <div class="text-left">
+        <p class="font-bold text-white text-sm">Ismail Oluade</p>
+        <p class="text-[11px] text-slate-400">Lead City University, Ibadan &bull; Graphic Designer & Wave Creator</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-white/80 font-medium">
+      <a href="tel:08145934121" class="hover:text-orange-400 transition">📞 08145934121</a>
+      <span>&bull;</span>
+      <a href="tel:08053840221" class="hover:text-orange-400 transition">📞 08053840221</a>
+      <span>&bull;</span>
+      <a href="mailto:ismailouade@gmail.com" class="hover:text-orange-400 transition">✉️ ismailouade@gmail.com</a>
+      <span>&bull;</span>
+      <a href="https://www.linkedin.com/in/ismail-oluade-680409441" target="_blank" rel="noopener noreferrer" class="hover:text-orange-400 transition">🔗 LinkedIn</a>
+    </div>
+
+    <p class="text-slate-500 text-center sm:text-right">
+      &copy; 2026 Ismail Oluade. All rights reserved.
+    </p>
+  </footer>
+
+  <!-- Smart Reminders & Alert Hub Modal -->
+  <div id="reminder-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="glass-panel rounded-3xl max-w-xl w-full border border-white/20 shadow-2xl p-6 sm:p-8 my-auto relative">
+      <button onclick="closeReminderModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition text-lg">&times;</button>
+      
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-2xl bg-orange-500/30 text-orange-300 flex items-center justify-center text-2xl border border-orange-400/30">
+          🔔
+        </div>
+        <div>
+          <h3 class="font-display font-bold text-2xl text-white">Wave Reminders & Alerts</h3>
+          <p class="text-xs text-white/70 font-medium">Schedule automated outfit briefs & weather alarms</p>
+        </div>
+      </div>
+
+      <div id="notif-permission-box" class="mb-5 p-3.5 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-between gap-3 text-xs">
+        <div>
+          <p class="font-bold text-white">Enable Browser Web Notifications</p>
+          <p class="text-white/70 text-[11px]">Get alerted with pleasant chime even when browsing other tabs</p>
+        </div>
+        <button id="request-perm-btn" class="px-3 py-1.5 rounded-xl bg-orange-500 text-white font-bold hover:bg-orange-600 transition shadow">
+          Enable
+        </button>
+      </div>
+
+      <form id="reminder-form" onsubmit="handleCreateReminder(event)" class="space-y-4 mb-6">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-white/70 mb-1.5">Reminder Label</label>
+          <input type="text" id="rem-title" required placeholder="e.g. Morning Outfit Brief, Rain Check" value="Morning Outfit Check" class="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-white/70 mb-1.5">Alert Time</label>
+            <input type="time" id="rem-time" required value="07:30" class="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-none font-mono">
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-white/70 mb-1.5">Condition Trigger</label>
+            <select id="rem-condition" class="w-full px-3 py-2.5 rounded-xl glass-input text-white text-xs bg-slate-900 focus:outline-none">
+              <option value="always">Always Alert (Daily Brief)</option>
+              <option value="rain">Only if Rain / Storm Forecasted</option>
+              <option value="cold">Only if Cold (&lt; 18°C)</option>
+              <option value="heat">Only if Hot (&gt; 28°C)</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold text-sm transition shadow-lg flex items-center justify-center gap-2">
+          <span>+ Add Scheduled Alert</span>
+        </button>
+      </form>
+
+      <div class="border-t border-white/10 pt-4">
+        <h4 class="text-xs uppercase tracking-wider font-bold text-white/80 mb-3 flex items-center justify-between">
+          <span>Active Reminders</span>
+          <span class="text-[10px] text-white/50">Stored in your browser</span>
+        </h4>
+        <div id="reminders-list" class="space-y-2.5 max-h-48 overflow-y-auto pr-1"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Details Modal -->
+  <div id="project-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="glass-panel rounded-3xl max-w-3xl w-full border border-white/20 shadow-2xl overflow-hidden my-auto animate-scale-in">
+      <div id="modal-banner" class="h-56 relative p-6 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span id="modal-badge" class="px-3.5 py-1 rounded-full bg-black/50 backdrop-blur-md text-xs font-bold text-white">Category</span>
+          <button onclick="closeProjectModal()" class="w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/90 transition text-lg">&times;</button>
+        </div>
+        <div>
+          <h3 id="modal-title" class="font-display font-extrabold text-2xl sm:text-3xl text-white">Project Title</h3>
+          <p id="modal-subtitle" class="text-xs sm:text-sm text-slate-200 font-medium mt-1">Subtitle</p>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-6">
+        <div>
+          <h4 class="text-xs uppercase tracking-wider font-bold text-orange-400 mb-2">Project Overview</h4>
+          <p id="modal-desc" class="text-sm text-slate-300 leading-relaxed"></p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="glass-panel rounded-2xl p-4">
+            <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Tools & Software</h5>
+            <p id="modal-tools" class="text-sm font-semibold text-white"></p>
+          </div>
+          <div class="glass-panel rounded-2xl p-4">
+            <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Key Deliverables</h5>
+            <p id="modal-deliverables" class="text-sm font-semibold text-white"></p>
+          </div>
+        </div>
+
+        <div id="modal-actions" class="pt-4 border-t border-white/10 flex items-center justify-end gap-3">
+          <button onclick="closeProjectModal()" class="px-5 py-2.5 rounded-xl glass-input text-xs font-bold text-slate-300 hover:text-white">Close</button>
+          <a id="modal-link-btn" href="#wave-app" class="px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition flex items-center gap-2">
+            <span>Scroll to Wave Live App</span> &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resume / CV Modal (Both Phone Numbers Clearly Listed) -->
+  <div id="cv-modal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="glass-panel rounded-3xl max-w-2xl w-full border border-white/20 shadow-2xl p-6 sm:p-10 my-auto text-left relative">
+      <button onclick="closeCvModal()" class="absolute top-6 right-6 w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition text-lg">&times;</button>
+
+      <div class="border-b border-white/10 pb-6 mb-6">
+        <h3 class="font-display font-extrabold text-3xl text-white">Ismail Oluade</h3>
+        <p class="text-sm font-bold text-orange-400 mt-1">Graphic Designer & Visual Identity Specialist</p>
+        <p class="text-xs text-slate-300 mt-2">
+          Lead City University, Ibadan &bull; Phones: <strong>08145934121</strong> / <strong>08053840221</strong> &bull; ismailouade@gmail.com
+        </p>
+      </div>
+
+      <div class="space-y-6 text-sm text-slate-300">
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-orange-400 mb-2">Education</h4>
+          <div class="glass-panel rounded-xl p-3.5">
+            <p class="font-bold text-white">Lead City University, Ibadan</p>
+            <p class="text-xs text-slate-400">Design & Creative Arts Studies &bull; Ibadan, Oyo State, Nigeria</p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-orange-400 mb-2">Core Competencies</h4>
+          <div class="flex flex-wrap gap-2 text-xs font-semibold">
+            <span class="px-2.5 py-1 rounded-lg glass-input text-white">Brand Strategy & Logos</span>
+            <span class="px-2.5 py-1 rounded-lg glass-input text-white">UI/UX & Interactive Design (Wave App)</span>
+            <span class="px-2.5 py-1 rounded-lg glass-input text-white">Adobe Photoshop & Illustrator</span>
+            <span class="px-2.5 py-1 rounded-lg glass-input text-white">Figma & Wireframing</span>
+            <span class="px-2.5 py-1 rounded-lg glass-input text-white">Packaging & Print Production</span>
+            <span class="px-2.5 py-1 rounded-lg glass-input text-white">Typography & Color Systems</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-orange-400 mb-2">Contact & Verification</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            LinkedIn: <a href="https://www.linkedin.com/in/ismail-oluade-680409441" target="_blank" class="text-cyan-400 underline">linkedin.com/in/ismail-oluade-680409441</a><br>
+            Primary Phone: <a href="tel:08145934121" class="text-orange-400 underline">08145934121</a> &bull; Secondary Phone: <a href="tel:08053840221" class="text-orange-400 underline">08053840221</a><br>
+            Email: <a href="mailto:ismailouade@gmail.com" class="text-white underline">ismailouade@gmail.com</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
+        <button onclick="window.print()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-xs hover:from-orange-600 hover:to-amber-600 transition flex items-center gap-2">
+          <span>🖨️ Print / Save as PDF</span>
+        </button>
+        <button onclick="closeCvModal()" class="px-5 py-2.5 rounded-xl glass-input text-slate-300 text-xs font-semibold hover:text-white">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unified Application Core Script -->
+  <script>
+    /**
+     * Unified Master App for Ismail Oluade
+     * Integrates the Wave Everyday Global Weather & Outfit Planner directly into the Graphic Designer Portfolio
+     */
+
+    // Application State
+    const state = {
+      unit: 'C',
+      currentCity: 'Ibadan',
+      currentCountry: 'Nigeria',
+      latitude: 7.3775,
+      longitude: 3.9059,
+      timezone: 'Africa/Lagos',
+      timezoneAbbr: 'WAT',
+      utcOffsetSeconds: 3600,
+      weatherData: null,
+      isLoading: false,
+      reminders: []
+    };
+
+    // WMO Weather Interpretation Codes
+    const WMO_MAP = {
+      0: { text: "Clear Sky", emoji: "☀️", theme: "sunny", isRain: false, isSnow: false },
+      1: { text: "Mainly Clear", emoji: "🌤️", theme: "sunny", isRain: false, isSnow: false },
+      2: { text: "Partly Cloudy", emoji: "⛅", theme: "mild", isRain: false, isSnow: false },
+      3: { text: "Overcast", emoji: "☁️", theme: "cloudy", isRain: false, isSnow: false },
+      45: { text: "Fog", emoji: "🌫️", theme: "cloudy", isRain: false, isSnow: false },
+      48: { text: "Depositing Rime Fog", emoji: "🌫️", theme: "cloudy", isRain: false, isSnow: false },
+      51: { text: "Light Drizzle", emoji: "🌦️", theme: "rainy", isRain: true, isSnow: false },
+      53: { text: "Moderate Drizzle", emoji: "🌧️", theme: "rainy", isRain: true, isSnow: false },
+      55: { text: "Dense Drizzle", emoji: "🌧️", theme: "rainy", isRain: true, isSnow: false },
+      56: { text: "Light Freezing Drizzle", emoji: "🌨️", theme: "cold", isRain: true, isSnow: true },
+      57: { text: "Dense Freezing Drizzle", emoji: "🌨️", theme: "cold", isRain: true, isSnow: true },
+      61: { text: "Slight Rain", emoji: "🌦️", theme: "rainy", isRain: true, isSnow: false },
+      63: { text: "Moderate Rain", emoji: "🌧️", theme: "rainy", isRain: true, isSnow: false },
+      65: { text: "Heavy Rain", emoji: "🌧️", theme: "rainy", isRain: true, isSnow: false },
+      66: { text: "Light Freezing Rain", emoji: "🌨️", theme: "cold", isRain: true, isSnow: true },
+      67: { text: "Heavy Freezing Rain", emoji: "🌨️", theme: "cold", isRain: true, isSnow: true },
+      71: { text: "Slight Snow Fall", emoji: "🌨️", theme: "cold", isRain: false, isSnow: true },
+      73: { text: "Moderate Snow Fall", emoji: "❄️", theme: "cold", isRain: false, isSnow: true },
+      75: { text: "Heavy Snow Fall", emoji: "❄️", theme: "cold", isRain: false, isSnow: true },
+      77: { text: "Snow Grains", emoji: "❄️", theme: "cold", isRain: false, isSnow: true },
+      80: { text: "Slight Rain Showers", emoji: "🌦️", theme: "rainy", isRain: true, isSnow: false },
+      81: { text: "Moderate Rain Showers", emoji: "🌧️", theme: "rainy", isRain: true, isSnow: false },
+      82: { text: "Violent Rain Showers", emoji: "⛈️", theme: "rainy", isRain: true, isSnow: false },
+      85: { text: "Slight Snow Showers", emoji: "🌨️", theme: "cold", isRain: false, isSnow: true },
+      86: { text: "Heavy Snow Showers", emoji: "❄️", theme: "cold", isRain: false, isSnow: true },
+      95: { text: "Thunderstorm", emoji: "⛈️", theme: "thunder", isRain: true, isSnow: false },
+      96: { text: "Thunderstorm with Hail", emoji: "⛈️", theme: "thunder", isRain: true, isSnow: true },
+      99: { text: "Heavy Thunderstorm with Hail", emoji: "⛈️", theme: "thunder", isRain: true, isSnow: true }
+    };
+
+    // Realistic offline demo data
+    const DEMO_WEATHER_DATA = {
+      timezone: "Africa/Lagos",
+      timezone_abbreviation: "WAT",
+      utc_offset_seconds: 3600,
+      current: {
+        temperature_2m: 29.4,
+        apparent_temperature: 31.2,
+        relative_humidity_2m: 68,
+        wind_speed_10m: 13.5,
+        wind_direction_10m: 45,
+        surface_pressure: 1012.4,
+        weather_code: 1,
+        is_day: 1
+      },
+      hourly: {
+        time: Array.from({ length: 24 }, (_, i) => `${new Date().toISOString().split('T')[0]}T${String(i).padStart(2, '0')}:00`),
+        temperature_2m: [24, 23, 23, 22, 23, 25, 27, 29, 31, 33, 34, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 25, 24, 24],
+        weather_code: [0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 61, 80, 2, 1, 0, 0, 0, 0, 0, 0, 0],
+        precipitation_probability: [0, 0, 0, 0, 5, 5, 10, 10, 15, 20, 25, 30, 45, 60, 50, 20, 10, 5, 0, 0, 0, 0, 0, 0]
+      },
+      daily: {
+        time: [
+          new Date().toISOString().split('T')[0],
+          new Date(Date.now() + 86400000).toISOString().split('T')[0],
+          new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0],
+          new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+          new Date(Date.now() + 86400000 * 4).toISOString().split('T')[0],
+          new Date(Date.now() + 86400000 * 5).toISOString().split('T')[0],
+        ],
+        temperature_2m_max: [33.5, 34.1, 32.8, 31.0, 32.5, 33.0],
+        temperature_2m_min: [22.4, 23.0, 22.8, 21.9, 22.5, 22.1],
+        weather_code: [1, 2, 61, 80, 0, 1],
+        precipitation_sum: [0.0, 0.4, 4.2, 8.5, 0.0, 0.2],
+        uv_index_max: [7.8, 8.2, 5.5, 4.9, 8.5, 7.9],
+        sunrise: [`${new Date().toISOString().split('T')[0]}T06:24`],
+        sunset: [`${new Date().toISOString().split('T')[0]}T18:48`]
+      }
+    };
+
+    // DOM Elements
+    const bodyBg = document.getElementById('dynamic-bg');
+    const searchForm = document.getElementById('search-form');
+    const cityInput = document.getElementById('city-search-input');
+    const clearSearchBtn = document.getElementById('clear-search-btn');
+    const searchDropdown = document.getElementById('search-dropdown');
+    const dropdownItems = document.getElementById('dropdown-items');
+    const geoBtn = document.getElementById('geo-btn');
+    const btnUnitC = document.getElementById('btn-unit-c');
+    const btnUnitF = document.getElementById('btn-unit-f');
+    const forecastDeck = document.getElementById('forecast-deck');
+    const hourlyRow = document.getElementById('hourly-forecast-row');
+    const toastBanner = document.getElementById('toast-banner');
+    const toastTitle = document.getElementById('toast-title');
+    const toastMsg = document.getElementById('toast-msg');
+    const toastDismissBtn = document.getElementById('toast-dismiss-btn');
+
+    // Weather Display Elements
+    const elCurrentCity = document.getElementById('current-city');
+    const elCurrentCountry = document.getElementById('current-country');
+    const elCurrentTimezone = document.getElementById('current-timezone');
+    const elCurrentTime = document.getElementById('current-time');
+    const elCurrentDate = document.getElementById('current-date');
+    const elCurrentTemp = document.getElementById('current-temp');
+    const elCurrentTempUnit = document.getElementById('current-temp-unit');
+    const elWeatherIcon = document.getElementById('weather-icon-container');
+    const elWeatherCondition = document.getElementById('weather-condition');
+    const elTempFeelsLike = document.getElementById('temp-feels-like');
+    const elTempHighLow = document.getElementById('temp-high-low');
+    const elHumidity = document.getElementById('weather-humidity');
+    const elWind = document.getElementById('weather-wind');
+    const elUv = document.getElementById('weather-uv');
+    const elSunrise = document.getElementById('weather-sunrise');
+    const elSunset = document.getElementById('weather-sunset');
+    const elPressure = document.getElementById('weather-pressure');
+    const elOutfitTag = document.getElementById('outfit-temp-tag');
+    const elRainBanner = document.getElementById('rain-advisory-banner');
+    const elOutfitList = document.getElementById('outfit-recommendations-list');
+    const elEssentialsPills = document.getElementById('essentials-pills');
+
+    // Quick Weather Nav Pill
+    const navWeatherIcon = document.getElementById('nav-weather-icon');
+    const navWeatherTemp = document.getElementById('nav-weather-temp');
+    const navWeatherCity = document.getElementById('nav-weather-city');
+
+    // Reminders Elements
+    const reminderModal = document.getElementById('reminder-modal');
+    const openReminderBtn = document.getElementById('open-reminder-btn');
+    const activeReminderCount = document.getElementById('active-reminder-count');
+    const remindersList = document.getElementById('reminders-list');
+    const requestPermBtn = document.getElementById('request-perm-btn');
+    const notifPermissionBox = document.getElementById('notif-permission-box');
+
+    // Temperature Converter
+    function formatTemp(celsius) {
+      if (state.unit === 'F') {
+        return Math.round((celsius * 9/5) + 32);
+      }
+      return Math.round(celsius);
+    }
+
+    function getCardinalDirection(angle) {
+      const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+      return directions[Math.round(angle / 45) % 8];
+    }
+
+    function showToast(title, message, isError = true) {
+      toastTitle.textContent = title;
+      toastMsg.textContent = message;
+      toastBanner.classList.remove('hidden');
+      toastBanner.className = isError 
+        ? 'glass-panel border-red-400/40 bg-red-950/40 rounded-2xl p-3.5 flex items-center justify-between text-sm transition-all duration-300 mb-6'
+        : 'glass-panel border-emerald-400/40 bg-emerald-950/40 rounded-2xl p-3.5 flex items-center justify-between text-sm transition-all duration-300 mb-6';
+      setTimeout(() => {
+        toastBanner.classList.add('hidden');
+      }, 7000);
+    }
+
+    toastDismissBtn.addEventListener('click', () => {
+      toastBanner.classList.add('hidden');
+    });
+
+    // Real-Time Ticking Local Clock
+    let clockInterval = null;
+    function startClockForTimezone(ianaTimezone) {
+      clearInterval(clockInterval);
+      function tick() {
+        try {
+          const now = new Date();
+          const timeStr = now.toLocaleTimeString('en-US', {
+            timeZone: ianaTimezone,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+          });
+          const dateStr = now.toLocaleDateString('en-US', {
+            timeZone: ianaTimezone,
+            weekday: 'long',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          });
+          elCurrentTime.textContent = timeStr;
+          elCurrentDate.textContent = dateStr;
+        } catch (e) {
+          const now = new Date();
+          elCurrentTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          elCurrentDate.textContent = now.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' });
+        }
+      }
+      tick();
+      clockInterval = setInterval(tick, 1000);
+    }
+
+    // Fetch Live Weather from Open-Meteo
+    async function fetchWeatherData(lat, lon, cityName, countryName) {
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max,sunrise,sunset&timezone=auto`;
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 9000);
+
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) throw new Error(`Open-Meteo HTTP Error: ${response.status}`);
+
+        const data = await response.json();
+        state.weatherData = data;
+        state.latitude = lat;
+        state.longitude = lon;
+        state.currentCity = cityName;
+        state.currentCountry = countryName;
+        state.timezone = data.timezone || 'UTC';
+        state.timezoneAbbr = data.timezone_abbreviation || 'UTC';
+        state.utcOffsetSeconds = data.utc_offset_seconds || 0;
+
+        saveToLocalStorage(cityName, countryName, lat, lon);
+        renderWeather();
+      } catch (err) {
+        console.warn('Live API request failed, falling back to simulated data:', err);
+        state.weatherData = DEMO_WEATHER_DATA;
+        state.currentCity = cityName || 'Ibadan';
+        state.currentCountry = countryName || 'Nigeria';
+        state.timezone = DEMO_WEATHER_DATA.timezone;
+        renderWeather();
+        showToast('Live Network Notice', `Showing cached weather data for ${state.currentCity}.`, false);
+      }
+    }
+
+    // Dynamic Weather Background
+    function updateTheme(weatherCode, isDay = 1, currentTemp = 20) {
+      const info = WMO_MAP[weatherCode] || { theme: "mild" };
+      bodyBg.className = 'min-h-screen text-white font-sans transition-all duration-1000 ease-in-out antialiased flex flex-col justify-between selection:bg-orange-500 selection:text-white';
+
+      if (!isDay && info.theme === 'sunny') {
+        bodyBg.classList.add('bg-weather-clear-night');
+        return;
+      }
+      if (info.theme === 'thunder') {
+        bodyBg.classList.add('bg-weather-thunder');
+      } else if (info.isRain) {
+        bodyBg.classList.add('bg-weather-rainy');
+      } else if (info.isSnow || currentTemp < 10) {
+        bodyBg.classList.add('bg-weather-cold');
+      } else if (info.theme === 'cloudy') {
+        bodyBg.classList.add('bg-weather-cloudy');
+      } else if (info.theme === 'sunny' && currentTemp > 24) {
+        bodyBg.classList.add('bg-weather-sunny');
+      } else {
+        bodyBg.classList.add('bg-weather-mild');
+      }
+    }
+
+    // Outfit Advisor Generator
+    function generateOutfitAdvice(tempC, weatherCode, windSpeed, uvIndex = 5) {
+      const wmo = WMO_MAP[weatherCode] || { text: 'Clear', isRain: false, isSnow: false };
+      const recommendations = [];
+      const essentials = [];
+
+      if (tempC >= 25) {
+        elOutfitTag.textContent = '☀️ Warm / Hot';
+        elOutfitTag.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-amber-500/30 text-amber-200 border border-amber-400/30 uppercase tracking-wider';
+        
+        recommendations.push({
+          icon: '👕',
+          title: 'Top & Fabric Choice',
+          desc: 'Lightweight breathable cotton, linen shirts, or relaxed-fit tees to stay cool.'
+        });
+        recommendations.push({
+          icon: '🩳',
+          title: 'Bottoms & Footwear',
+          desc: 'Breathable shorts, linen trousers, or light skirts with ventilated canvas sneakers or slide sandals.'
+        });
+        recommendations.push({
+          icon: '🕶️',
+          title: 'Sun Protection & Hydration',
+          desc: 'Polarized sunglasses, wide-brim cap, SPF 30+ sunscreen, and carry a water bottle.'
+        });
+        essentials.push('Sunglasses', 'Water Bottle', 'Sunscreen');
+      } else if (tempC >= 15 && tempC < 25) {
+        elOutfitTag.textContent = '⛅ Mild / Pleasant';
+        elOutfitTag.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-sky-500/30 text-sky-200 border border-sky-400/30 uppercase tracking-wider';
+
+        recommendations.push({
+          icon: '🧥',
+          title: 'Smart Layering',
+          desc: 'Fitted t-shirt paired with a light denim jacket, cardigan, or casual overshirt.'
+        });
+        recommendations.push({
+          icon: '👖',
+          title: 'Bottoms & Footwear',
+          desc: 'Classic denim jeans, chinos, or casual trousers with everyday sneakers.'
+        });
+        recommendations.push({
+          icon: '🎒',
+          title: 'Day Transition Tip',
+          desc: 'Comfortable day temperatures; keep a light jacket nearby for cooler evenings.'
+        });
+        essentials.push('Light Jacket', 'Sneakers', 'Day Bag');
+      } else {
+        elOutfitTag.textContent = '❄️ Chilly / Cold';
+        elOutfitTag.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 uppercase tracking-wider';
+
+        recommendations.push({
+          icon: '🧥',
+          title: 'Insulated Outerwear',
+          desc: 'Heavy overcoat, down puffer, or insulated parka over a warm knit sweater or thermal layer.'
+        });
+        recommendations.push({
+          icon: '👖',
+          title: 'Warm Bottoms & Boots',
+          desc: 'Heavyweight trousers or thermal denim with wool socks and insulated boots.'
+        });
+        recommendations.push({
+          icon: '🧣',
+          title: 'Thermal Accessories',
+          desc: 'Knitted wool beanie, fleece gloves, and a soft scarf for wind chill protection.'
+        });
+        essentials.push('Heavy Coat', 'Scarf & Beanie', 'Warm Boots');
+      }
+
+      if (wmo.isRain || weatherCode >= 51 && weatherCode <= 67 || weatherCode >= 80 && weatherCode <= 82 || weatherCode >= 95) {
+        elRainBanner.classList.remove('hidden');
+        recommendations.unshift({
+          icon: '☔',
+          title: 'Rain Protection Essential',
+          desc: 'Pack an umbrella, water-resistant trench coat or hooded jacket, and water-friendly shoes.'
+        });
+        if (!essentials.includes('Umbrella')) essentials.unshift('Umbrella');
+      } else {
+        elRainBanner.classList.add('hidden');
+      }
+
+      if (wmo.isSnow) {
+        recommendations.unshift({
+          icon: '❄️',
+          title: 'Snow & Frost Alert',
+          desc: 'Deep-tread anti-slip winter boots, moisture-wicking thermals, and waterproof outerwear.'
+        });
+        essentials.unshift('Thermal Base', 'Grip Boots');
+      }
+
+      if (windSpeed > 22) {
+        recommendations.push({
+          icon: '💨',
+          title: 'Windy Conditions',
+          desc: `Wind is blowing at ${Math.round(windSpeed)} km/h. Wear a windbreaker jacket and secure loose hats.`
+        });
+        essentials.push('Windbreaker');
+      }
+
+      elOutfitList.innerHTML = recommendations.slice(0, 4).map(rec => `
+        <div class="glass-input rounded-2xl p-3 sm:p-3.5 flex items-start gap-3.5 border border-white/15 hover:bg-white/20 transition-all">
+          <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-xl shrink-0 shadow-inner mt-0.5">
+            ${rec.icon}
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white tracking-tight">${rec.title}</h4>
+            <p class="text-xs text-white/80 font-medium leading-relaxed mt-0.5">${rec.desc}</p>
+          </div>
+        </div>
+      `).join('');
+
+      elEssentialsPills.innerHTML = essentials.slice(0, 4).map(item => `
+        <span class="px-2.5 py-0.5 rounded-full bg-white/20 border border-white/25 text-[11px] font-semibold text-white">
+          ${item}
+        </span>
+      `).join('');
+    }
+
+    // Render Weather Screen
+    function renderWeather() {
+      if (!state.weatherData) return;
+
+      const current = state.weatherData.current;
+      const daily = state.weatherData.daily;
+      const hourly = state.weatherData.hourly;
+      const wmo = WMO_MAP[current.weather_code] || { text: 'Clear Sky', emoji: '☀️', theme: 'sunny', isRain: false, isSnow: false };
+
+      // Update Texts
+      elCurrentCity.textContent = state.currentCity;
+      elCurrentCountry.textContent = state.currentCountry;
+
+      // Update Quick Nav Pill
+      navWeatherIcon.textContent = wmo.emoji;
+      navWeatherTemp.textContent = `${formatTemp(current.temperature_2m)}°${state.unit}`;
+      navWeatherCity.textContent = state.currentCity;
+      
+      const offsetHours = state.utcOffsetSeconds ? (state.utcOffsetSeconds / 3600) : 0;
+      const offsetFormatted = offsetHours >= 0 ? `+${offsetHours}` : `${offsetHours}`;
+      elCurrentTimezone.textContent = `📍 ${state.timezone} (${state.timezoneAbbr}, UTC${offsetFormatted})`;
+
+      startClockForTimezone(state.timezone);
+
+      elCurrentTemp.textContent = formatTemp(current.temperature_2m);
+      elCurrentTempUnit.textContent = `°${state.unit}`;
+      elWeatherIcon.textContent = wmo.emoji;
+      elWeatherCondition.textContent = wmo.text;
+      elTempFeelsLike.textContent = `Feels like ${formatTemp(current.apparent_temperature)}°${state.unit}`;
+
+      const maxToday = formatTemp(daily.temperature_2m_max[0]);
+      const minToday = formatTemp(daily.temperature_2m_min[0]);
+      elTempHighLow.textContent = `${maxToday}° / ${minToday}°`;
+
+      elHumidity.textContent = `${Math.round(current.relative_humidity_2m)}%`;
+      const windDir = getCardinalDirection(current.wind_direction_10m || 0);
+      elWind.textContent = `${Math.round(current.wind_speed_10m)} km/h ${windDir}`;
+
+      const uvToday = daily.uv_index_max ? daily.uv_index_max[0] : 6;
+      let uvLabel = 'Low';
+      if (uvToday >= 8) uvLabel = 'Very High';
+      else if (uvToday >= 6) uvLabel = 'High';
+      else if (uvToday >= 3) uvLabel = 'Mod';
+      elUv.textContent = `${Math.round(uvToday)} (${uvLabel})`;
+
+      if (daily.sunrise && daily.sunrise[0]) {
+        elSunrise.textContent = new Date(daily.sunrise[0]).toLocaleTimeString('en-US', {
+          timeZone: state.timezone,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      }
+      if (daily.sunset && daily.sunset[0]) {
+        elSunset.textContent = new Date(daily.sunset[0]).toLocaleTimeString('en-US', {
+          timeZone: state.timezone,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      }
+
+      const pressure = current.surface_pressure ? Math.round(current.surface_pressure) : 1013;
+      elPressure.textContent = `${pressure} hPa (Normal)`;
+
+      updateTheme(current.weather_code, current.is_day, current.temperature_2m);
+      generateOutfitAdvice(current.temperature_2m, current.weather_code, current.wind_speed_10m, uvToday);
+
+      renderHourlyForecast(hourly);
+      render5DayForecast(daily);
+    }
+
+    // Render Hourly
+    function renderHourlyForecast(hourly) {
+      if (!hourly || !hourly.time) return;
+      hourlyRow.innerHTML = '';
+      const count = Math.min(24, hourly.time.length);
+      for (let i = 0; i < count; i++) {
+        const timeStr = hourly.time[i];
+        const dateObj = new Date(timeStr);
+        const hourLabel = dateObj.toLocaleTimeString('en-US', {
+          timeZone: state.timezone,
+          hour: 'numeric',
+          hour12: true
+        });
+
+        const code = hourly.weather_code[i];
+        const wmo = WMO_MAP[code] || { text: 'Clear', emoji: '☀️' };
+        const temp = formatTemp(hourly.temperature_2m[i]);
+        const rainProb = hourly.precipitation_probability ? hourly.precipitation_probability[i] : 0;
+
+        const card = document.createElement('div');
+        card.className = 'glass-panel glass-card-hover rounded-2xl p-3 flex flex-col items-center justify-between text-center min-w-[85px] border border-white/15 shrink-0';
+        card.innerHTML = `
+          <span class="text-[11px] font-bold text-white/90 whitespace-nowrap">${hourLabel}</span>
+          <span class="text-2xl my-1.5 filter drop-shadow">${wmo.emoji}</span>
+          <span class="text-sm font-extrabold text-white">${temp}°</span>
+          <span class="text-[10px] font-semibold ${rainProb > 25 ? 'text-cyan-300' : 'text-white/40'} mt-1">
+            ${rainProb > 0 ? `💧 ${rainProb}%` : '0%'}
+          </span>
+        `;
+        hourlyRow.appendChild(card);
+      }
+    }
+
+    // Render 5-Day Forecast
+    function render5DayForecast(daily) {
+      forecastDeck.innerHTML = '';
+      const count = Math.min(5, daily.time.length - 1);
+      for (let i = 1; i <= count; i++) {
+        const dateStr = daily.time[i];
+        const dateObj = new Date(dateStr + 'T00:00:00');
+        const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+        const monthDay = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        
+        const code = daily.weather_code[i];
+        const wmo = WMO_MAP[code] || { text: 'Clear', emoji: '☀️' };
+        const maxT = formatTemp(daily.temperature_2m_max[i]);
+        const minT = formatTemp(daily.temperature_2m_min[i]);
+        const precip = daily.precipitation_sum ? daily.precipitation_sum[i] : 0;
+
+        const card = document.createElement('div');
+        card.className = 'glass-panel glass-card-hover rounded-2xl p-4 flex flex-col items-center justify-between text-center border border-white/20';
+        card.innerHTML = `
+          <div>
+            <p class="font-bold text-sm text-white">${dayName}</p>
+            <p class="text-[10px] text-white/60 font-medium">${monthDay}</p>
+          </div>
+          <div class="my-3 text-3xl filter drop-shadow">${wmo.emoji}</div>
+          <p class="text-[11px] text-white/80 font-medium truncate w-full mb-2" title="${wmo.text}">${wmo.text}</p>
+          <div class="w-full pt-2 border-t border-white/10 flex items-center justify-between text-xs">
+            <span class="font-bold text-white">${maxT}°</span>
+            <div class="h-1 flex-1 mx-2 bg-white/20 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-sky-400 to-amber-400 rounded-full" style="width: 75%"></div>
+            </div>
+            <span class="text-white/70 font-semibold">${minT}°</span>
+          </div>
+          ${precip > 0 ? `
+            <div class="mt-2 text-[10px] font-semibold text-sky-200 flex items-center gap-1">
+              <span>💧</span> ${precip.toFixed(1)}mm
+            </div>
+          ` : `
+            <div class="mt-2 text-[10px] font-medium text-white/40">0mm rain</div>
+          `}
+        `;
+        forecastDeck.appendChild(card);
+      }
+    }
+
+    // Worldwide Geocoding Search
+    async function searchCities(query) {
+      if (!query || query.trim().length < 2) {
+        searchDropdown.classList.add('hidden');
+        return;
+      }
+
+      try {
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=6&language=en&format=json`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Geocoding request failed');
+        const data = await res.json();
+
+        if (data.results && data.results.length > 0) {
+          showDropdownResults(data.results);
+        } else {
+          showDropdownEmpty(query);
+        }
+      } catch (err) {
+        console.warn('Geocoding error or offline fallback:', err);
+        const fallbackList = [
+          { name: 'Ibadan', country: 'Nigeria', admin1: 'Oyo State', latitude: 7.3775, longitude: 3.9059 },
+          { name: 'Lagos', country: 'Nigeria', admin1: 'Lagos State', latitude: 6.5244, longitude: 3.3792 },
+          { name: 'Abuja', country: 'Nigeria', admin1: 'FCT', latitude: 9.0765, longitude: 7.3986 },
+          { name: 'London', country: 'United Kingdom', admin1: 'England', latitude: 51.5074, longitude: -0.1278 },
+          { name: 'New York', country: 'United States', admin1: 'New York', latitude: 40.7128, longitude: -74.0060 },
+          { name: 'Tokyo', country: 'Japan', admin1: 'Tokyo Prefecture', latitude: 35.6762, longitude: 139.6503 },
+          { name: 'Dubai', country: 'United Arab Emirates', admin1: 'Dubai', latitude: 25.2048, longitude: 55.2708 },
+          { name: 'Paris', country: 'France', admin1: 'Île-de-France', latitude: 48.8566, longitude: 2.3522 }
+        ].filter(c => c.name.toLowerCase().includes(query.toLowerCase()) || c.country.toLowerCase().includes(query.toLowerCase()));
+
+        if (fallbackList.length > 0) {
+          showDropdownResults(fallbackList);
+        } else {
+          showDropdownEmpty(query);
+        }
+      }
+    }
+
+    function showDropdownResults(cities) {
+      dropdownItems.innerHTML = '';
+      cities.forEach(city => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'w-full text-left px-4 py-3 hover:bg-white/20 transition flex items-center justify-between text-sm group';
+        item.innerHTML = `
+          <div>
+            <span class="font-bold text-white group-hover:text-amber-200 transition">${city.name}</span>
+            <span class="text-xs text-white/70 ml-1.5">${city.admin1 ? city.admin1 + ', ' : ''}${city.country || ''}</span>
+          </div>
+          <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white/90">Select &rarr;</span>
+        `;
+        item.addEventListener('click', () => {
+          cityInput.value = `${city.name}, ${city.country || ''}`;
+          searchDropdown.classList.add('hidden');
+          fetchWeatherData(city.latitude, city.longitude, city.name, city.country || 'Global');
+        });
+        dropdownItems.appendChild(item);
+      });
+      searchDropdown.classList.remove('hidden');
+    }
+
+    function showDropdownEmpty(query) {
+      dropdownItems.innerHTML = `
+        <div class="px-4 py-3 text-xs text-white/70 italic text-center">
+          No matching cities found for "${query}". Press Enter to search anyway.
+        </div>
+      `;
+      searchDropdown.classList.remove('hidden');
+    }
+
+    let searchTimeout = null;
+    cityInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      clearSearchBtn.classList.toggle('hidden', val.length === 0);
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchCities(val);
+      }, 350);
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      cityInput.value = '';
+      clearSearchBtn.classList.add('hidden');
+      searchDropdown.classList.add('hidden');
+      cityInput.focus();
+    });
+
+    searchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const query = cityInput.value.trim();
+      if (!query) return;
+
+      searchDropdown.classList.add('hidden');
+      try {
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=1&language=en&format=json`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+          const top = data.results[0];
+          fetchWeatherData(top.latitude, top.longitude, top.name, top.country || 'Global');
+        } else {
+          showToast('City Not Found', `We could not locate "${query}". Check the spelling or choose from World Hubs.`);
+        }
+      } catch (err) {
+        showToast('Search Error', `Could not search "${query}".`);
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!searchForm.contains(e.target)) {
+        searchDropdown.classList.add('hidden');
+      }
+    });
+
+    // Geolocation
+    geoBtn.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        showToast('Not Supported', 'Geolocation is not supported by your current browser.');
+        return;
+      }
+
+      geoBtn.classList.add('animate-pulse');
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          geoBtn.classList.remove('animate-pulse');
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          cityInput.value = `📍 Current GPS (${lat.toFixed(2)}, ${lon.toFixed(2)})`;
+          clearSearchBtn.classList.remove('hidden');
+
+          let locName = 'Your Location';
+          let countryName = 'Current GPS';
+          try {
+            const revRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+            if (revRes.ok) {
+              const revData = await revRes.json();
+              locName = revData.city || revData.locality || 'Your Location';
+              countryName = revData.countryName || 'GPS Location';
+            }
+          } catch(e) {}
+
+          fetchWeatherData(lat, lon, locName, countryName);
+          showToast('Location Detected', `Weather updated for ${locName}!`, false);
+        },
+        (error) => {
+          geoBtn.classList.remove('animate-pulse');
+          showToast('Location Access', 'Location permission denied. Please search your city manually.');
+        },
+        { timeout: 10000, enableHighAccuracy: true }
+      );
+    });
+
+    // Quick Select Pills
+    document.querySelectorAll('.city-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const city = pill.getAttribute('data-city');
+        const lat = parseFloat(pill.getAttribute('data-lat'));
+        const lon = parseFloat(pill.getAttribute('data-lon'));
+        const country = pill.getAttribute('data-country');
+        cityInput.value = `${city}, ${country}`;
+        clearSearchBtn.classList.remove('hidden');
+        fetchWeatherData(lat, lon, city, country);
+      });
+    });
+
+    // Unit Toggles
+    btnUnitC.addEventListener('click', () => {
+      if (state.unit === 'C') return;
+      state.unit = 'C';
+      btnUnitC.className = 'px-2.5 py-1 rounded-lg bg-white/30 text-white transition-all shadow-sm';
+      btnUnitF.className = 'px-2.5 py-1 rounded-lg text-white/70 hover:text-white transition-all';
+      renderWeather();
+    });
+
+    btnUnitF.addEventListener('click', () => {
+      if (state.unit === 'F') return;
+      state.unit = 'F';
+      btnUnitF.className = 'px-2.5 py-1 rounded-lg bg-white/30 text-white transition-all shadow-sm';
+      btnUnitC.className = 'px-2.5 py-1 rounded-lg text-white/70 hover:text-white transition-all';
+      renderWeather();
+    });
+
+    // LocalStorage
+    function saveToLocalStorage(city, country, lat, lon) {
+      try {
+        localStorage.setItem('wave_weather_last_city', JSON.stringify({
+          city, country, lat, lon, timestamp: Date.now()
+        }));
+      } catch (e) {}
+    }
+
+    function loadFromLocalStorage() {
+      try {
+        const saved = localStorage.getItem('wave_weather_last_city');
+        if (saved) return JSON.parse(saved);
+      } catch (e) {}
+      return null;
+    }
+
+    // Audio Chime via Web Audio API
+    function playAlertChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(659.25, now);
+        gain1.gain.setValueAtTime(0.2, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.6);
+
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(880, now + 0.15);
+        gain2.gain.setValueAtTime(0.25, now + 0.15);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.15);
+        osc2.stop(now + 0.9);
+      } catch (e) {}
+    }
+
+    // Reminders Logic
+    openReminderBtn.addEventListener('click', () => {
+      reminderModal.classList.remove('hidden');
+      renderRemindersList();
+    });
+
+    function closeReminderModal() {
+      reminderModal.classList.add('hidden');
+    }
+
+    reminderModal.addEventListener('click', (e) => {
+      if (e.target === reminderModal) closeReminderModal();
+    });
+
+    requestPermBtn.addEventListener('click', () => {
+      if (!('Notification' in window)) {
+        alert('Web notifications are not supported in this browser.');
+        return;
+      }
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          notifPermissionBox.innerHTML = `
+            <div class="text-emerald-300 font-bold flex items-center gap-2">
+              <span>&check;</span> Browser Notifications Activated!
+            </div>
+          `;
+          playAlertChime();
+        }
+      });
+    });
+
+    function loadReminders() {
+      try {
+        const data = localStorage.getItem('wave_weather_reminders');
+        if (data) {
+          state.reminders = JSON.parse(data);
+        } else {
+          state.reminders = [
+            {
+              id: 'rem-1',
+              title: 'Morning Outfit & Weather Prep',
+              time: '07:30',
+              condition: 'always',
+              city: 'Ibadan',
+              enabled: true
+            },
+            {
+              id: 'rem-2',
+              title: 'Rain / Umbrella Watch',
+              time: '12:00',
+              condition: 'rain',
+              city: 'Ibadan',
+              enabled: true
+            }
+          ];
+          saveReminders();
+        }
+      } catch (e) {
+        state.reminders = [];
+      }
+      updateReminderBadge();
+    }
+
+    function saveReminders() {
+      try {
+        localStorage.setItem('wave_weather_reminders', JSON.stringify(state.reminders));
+      } catch (e) {}
+      updateReminderBadge();
+    }
+
+    function updateReminderBadge() {
+      const activeCount = state.reminders.filter(r => r.enabled).length;
+      activeReminderCount.textContent = activeCount;
+    }
+
+    function renderRemindersList() {
+      if (state.reminders.length === 0) {
+        remindersList.innerHTML = `<div class="text-xs text-white/50 text-center py-4">No scheduled alerts yet. Add one above!</div>`;
+        return;
+      }
+
+      remindersList.innerHTML = state.reminders.map(rem => `
+        <div class="glass-input rounded-xl p-3 flex items-center justify-between gap-3 text-xs border border-white/10 hover:bg-white/20 transition">
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-white">${rem.title}</span>
+              <span class="px-2 py-0.5 rounded-full bg-white/20 font-mono text-[10px] text-white">${rem.time}</span>
+            </div>
+            <div class="text-[11px] text-white/70 mt-0.5">
+              <span>📍 ${rem.city}</span> &bull; 
+              <span class="text-amber-300 font-medium">${rem.condition === 'always' ? 'Daily Brief' : rem.condition === 'rain' ? 'Rain Only' : rem.condition}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="triggerReminderAlert('${rem.id}', true)" class="px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/30 text-white font-semibold text-[11px] transition" title="Test this alert now">
+              ⚡ Test
+            </button>
+            <button onclick="toggleReminder('${rem.id}')" class="px-2.5 py-1 rounded-lg ${rem.enabled ? 'bg-emerald-500 text-white' : 'bg-white/20 text-white/60'} font-bold text-[11px] transition">
+              ${rem.enabled ? 'ON' : 'OFF'}
+            </button>
+            <button onclick="deleteReminder('${rem.id}')" class="p-1 rounded-lg text-white/50 hover:text-red-300 transition text-sm">
+              &times;
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleCreateReminder(e) {
+      e.preventDefault();
+      const title = document.getElementById('rem-title').value.trim();
+      const time = document.getElementById('rem-time').value;
+      const condition = document.getElementById('rem-condition').value;
+
+      const newRem = {
+        id: 'rem-' + Date.now(),
+        title,
+        time,
+        condition,
+        city: state.currentCity,
+        enabled: true
+      };
+
+      state.reminders.push(newRem);
+      saveReminders();
+      renderRemindersList();
+      showToast('Alert Scheduled', `"${title}" has been saved for ${time}!`, false);
+    }
+
+    function toggleReminder(id) {
+      const rem = state.reminders.find(r => r.id === id);
+      if (rem) {
+        rem.enabled = !rem.enabled;
+        saveReminders();
+        renderRemindersList();
+      }
+    }
+
+    function deleteReminder(id) {
+      state.reminders = state.reminders.filter(r => r.id !== id);
+      saveReminders();
+      renderRemindersList();
+    }
+
+    function triggerReminderAlert(id, isTest = false) {
+      const rem = state.reminders.find(r => r.id === id);
+      if (!rem) return;
+
+      playAlertChime();
+
+      const city = rem.city || state.currentCity;
+      const temp = state.weatherData ? formatTemp(state.weatherData.current.temperature_2m) : 28;
+      const condition = state.weatherData ? (WMO_MAP[state.weatherData.current.weather_code]?.text || 'Clear Sky') : 'Sunny';
+      const alertMsg = `${isTest ? '[TEST ALERT] ' : ''}${rem.title} &bull; ${city}: ${temp}°${state.unit}, ${condition}. Check your curated outfit!`;
+
+      showToast(`🔔 Wave Alert: ${rem.title}`, alertMsg, false);
+
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(`Wave Alert: ${rem.title}`, {
+          body: alertMsg,
+          icon: 'https://cdn-icons-png.flaticon.com/512/1163/1163657.png'
+        });
+      }
+    }
+
+    setInterval(() => {
+      if (state.reminders.length === 0) return;
+      const now = new Date();
+      const currentHours = String(now.getHours()).padStart(2, '0');
+      const currentMins = String(now.getMinutes()).padStart(2, '0');
+      const currentTimeStr = `${currentHours}:${currentMins}`;
+
+      state.reminders.forEach(rem => {
+        if (rem.enabled && rem.time === currentTimeStr && now.getSeconds() === 0) {
+          triggerReminderAlert(rem.id, false);
+        }
+      });
+    }, 1000);
+
+    // ==========================================
+    // PORTFOLIO PROJECTS MODALS & FILTERING
+    // ==========================================
+    const PROJECTS = {
+      'wave-weather': {
+        title: 'Wave • Global Weather & Outfit Planner',
+        subtitle: 'Everyday Utility Suite with Worldwide Timezones & Alarms',
+        badge: 'UI/UX & Web Design',
+        bgClass: 'bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-800',
+        desc: 'An everyday interactive web application built with modern glassmorphism, dynamic condition-shifting gradient backgrounds, and real-time integration with Open-Meteo REST API across all countries. Features real-time local timezones, 24-hour hourly progression, smart condition-driven alert reminders with Web Audio chime, and dynamic outfit advice.',
+        tools: 'Tailwind CSS, Vanilla JavaScript, Open-Meteo REST API, Web Audio API, LocalStorage',
+        deliverables: 'Interactive Single Page Web App, UX wireframes, Style guide',
+        linkText: 'Scroll to Wave Live App',
+        linkUrl: '#wave-app'
+      },
+      'lead-city-fest': {
+        title: 'Lead City Creatives Festival',
+        subtitle: 'Campus Arts Exhibition & Visual Identity System',
+        badge: 'Campus Identity & Wayfinding',
+        bgClass: 'bg-gradient-to-tr from-purple-800 via-orange-600 to-amber-500',
+        desc: 'Official visual brand identity created for Lead City University Ibadan design symposium. Included geometric African motifs blended with modern typography, event badges, dynamic roll-up banners, and wayfinding signage throughout the campus exhibition hall.',
+        tools: 'Adobe Illustrator, Adobe Photoshop, InDesign, Large Format Print',
+        deliverables: 'Logo Suite, Roll-up Banners, Event Badges, Brochure, Wayfinding Signage',
+        linkText: 'Contact for Full Case Study',
+        linkUrl: '#contact'
+      },
+      'afrovibe': {
+        title: 'AfroVibe Soundstage Concert',
+        subtitle: 'Dynamic Neon 3D Typography & Concert Visuals',
+        badge: 'Music & Event Branding',
+        bgClass: 'bg-gradient-to-tr from-pink-600 via-rose-600 to-amber-500',
+        desc: 'Vibrant promotional campaign for a flagship music festival. Developed custom 3D typography, social media motion teasers, artist announcement posters, and VIP merchandise kits.',
+        tools: 'Adobe Photoshop, Blender 3D, Illustrator, After Effects',
+        deliverables: 'Key Visual Posters, Artist Lineup Cards, Instagram Carousels, Merch Mockups',
+        linkText: 'Contact for Full Case Study',
+        linkUrl: '#contact'
+      },
+      'lumina-skincare': {
+        title: 'Lumina Botanical Skincare',
+        subtitle: 'Minimalist Eco-Luxury Cosmetics Packaging',
+        badge: 'Packaging & Editorial',
+        bgClass: 'bg-gradient-to-tr from-emerald-800 via-teal-700 to-slate-900',
+        desc: 'Complete packaging design for an organic skincare brand focusing on natural African botanical extracts. Features embossed gold-foil details, recycled carton dielines, and clean Swiss typography.',
+        tools: 'Adobe Illustrator, Packaging Dielines, 3D Product Mockups, InDesign',
+        deliverables: 'Dropper Bottle Labels, Cream Jar Packaging, Outer Carton Box, Lookbook',
+        linkText: 'Contact for Full Case Study',
+        linkUrl: '#contact'
+      },
+      'nexapay': {
+        title: 'NexaPay Digital Banking & Wallet',
+        subtitle: 'Sleek Neo-Bank Mobile Application UI/UX',
+        badge: 'Fintech UI/UX Design',
+        bgClass: 'bg-gradient-to-tr from-blue-900 via-indigo-900 to-purple-800',
+        desc: 'End-to-end design system and user interface for a modern fintech payment app. Crafted intuitive flows for multi-currency wallets, instant peer-to-peer transfers, dark mode accessibility, and interactive transaction history.',
+        tools: 'Figma, Auto-Layout, Interactive Prototyping, Design Tokens',
+        deliverables: 'Complete UI Kit (40+ screens), Component Library, User Journey Maps',
+        linkText: 'Contact for Full Case Study',
+        linkUrl: '#contact'
+      },
+      'elysian-coffee': {
+        title: 'Elysian Specialty Coffee Roasters',
+        subtitle: 'Artisan Coffee Identity & Takeaway Suite',
+        badge: 'Brand & Packaging',
+        bgClass: 'bg-gradient-to-tr from-amber-950 via-amber-800 to-orange-700',
+        desc: 'Visual rebranding for a craft coffee roaster. Developed hand-illustrated single-origin badges, compostable bag packaging, takeaway cups, and cafe collateral.',
+        tools: 'Hand Illustration, Vector Artwork, Illustrator, Offset Print Prep',
+        deliverables: 'Roast Bag Labels, Takeaway Cups, Loyalty Card, Menu Boards',
+        linkText: 'Contact for Full Case Study',
+        linkUrl: '#contact'
+      }
+    };
+
+    document.querySelectorAll('.project-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.project-filter-btn').forEach(b => {
+          b.className = 'project-filter-btn px-4 py-2 rounded-xl glass-panel text-slate-300 hover:text-white transition';
+        });
+        btn.className = 'project-filter-btn px-4 py-2 rounded-xl bg-orange-500 text-white transition shadow-sm';
+
+        const filter = btn.getAttribute('data-filter');
+        document.querySelectorAll('.project-card').forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filter === 'all' || category === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    const modal = document.getElementById('project-modal');
+    const modalBanner = document.getElementById('modal-banner');
+    const modalBadge = document.getElementById('modal-badge');
+    const modalTitle = document.getElementById('modal-title');
+    const modalSubtitle = document.getElementById('modal-subtitle');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalTools = document.getElementById('modal-tools');
+    const modalDeliverables = document.getElementById('modal-deliverables');
+    const modalLinkBtn = document.getElementById('modal-link-btn');
+
+    function openProjectModal(projectId) {
+      const p = PROJECTS[projectId];
+      if (!p) return;
+
+      modalBanner.className = `h-56 relative p-6 flex flex-col justify-between ${p.bgClass}`;
+      modalBadge.textContent = p.badge;
+      modalTitle.textContent = p.title;
+      modalSubtitle.textContent = p.subtitle;
+      modalDesc.textContent = p.desc;
+      modalTools.textContent = p.tools;
+      modalDeliverables.textContent = p.deliverables;
+      modalLinkBtn.innerHTML = `<span>${p.linkText}</span> &rarr;`;
+      modalLinkBtn.href = p.linkUrl;
+      modalLinkBtn.onclick = () => {
+        closeProjectModal();
+      };
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeProjectModal() {
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeProjectModal();
+    });
+
+    // CV Modal
+    const cvModal = document.getElementById('cv-modal');
+    const openCvBtn = document.getElementById('open-cv-btn');
+
+    openCvBtn.addEventListener('click', () => {
+      cvModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    });
+
+    function closeCvModal() {
+      cvModal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    cvModal.addEventListener('click', (e) => {
+      if (e.target === cvModal) closeCvModal();
+    });
+
+    function copyEmailToClipboard() {
+      navigator.clipboard.writeText('ismailouade@gmail.com').then(() => {
+        alert('Copied to clipboard: ismailouade@gmail.com');
+      }).catch(() => {
+        prompt('Copy email:', 'ismailouade@gmail.com');
+      });
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const successMsg = document.getElementById('contact-success-msg');
+      const submitBtn = document.getElementById('contact-submit-btn');
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-75');
+      successMsg.classList.remove('hidden');
+
+      setTimeout(() => {
+        window.location.href = `mailto:ismailouade@gmail.com?subject=Design Project Inquiry via Portfolio`;
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-75');
+      }, 1000);
+    }
+
+    // App Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      loadReminders();
+      const savedCity = loadFromLocalStorage();
+      if (savedCity && savedCity.lat && savedCity.lon) {
+        cityInput.value = `${savedCity.city}, ${savedCity.country}`;
+        clearSearchBtn.classList.remove('hidden');
+        fetchWeatherData(savedCity.lat, savedCity.lon, savedCity.city, savedCity.country);
+      } else {
+        cityInput.value = 'Ibadan, Nigeria';
+        clearSearchBtn.classList.remove('hidden');
+        fetchWeatherData(7.3775, 3.9059, 'Ibadan', 'Nigeria');
+      }
+    });
+  </script>
+</body>
+</html>
